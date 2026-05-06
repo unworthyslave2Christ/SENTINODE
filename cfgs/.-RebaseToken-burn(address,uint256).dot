@@ -1,0 +1,28 @@
+digraph{
+0[label="Node Type: ENTRY_POINT 0
+"];
+0->3;
+1[label="Node Type: EXPRESSION 1
+
+EXPRESSION:
+_mintAccruedInterest(_from)
+
+IRs:
+INTERNAL_CALL, RebaseToken._mintAccruedInterest(address)(_from)"];
+1->2;
+2[label="Node Type: EXPRESSION 2
+
+EXPRESSION:
+_burn(_from,_amount)
+
+IRs:
+INTERNAL_CALL, ERC20._burn(address,uint256)(_from,_amount)"];
+3[label="Node Type: EXPRESSION 3
+
+EXPRESSION:
+onlyRole(MINT_AND_BURN_ROLE)
+
+IRs:
+MODIFIER_CALL, AccessControl.onlyRole(bytes32)(MINT_AND_BURN_ROLE)"];
+3->1;
+}

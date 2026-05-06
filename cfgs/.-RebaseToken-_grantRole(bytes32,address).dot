@@ -1,0 +1,50 @@
+digraph{
+0[label="Node Type: ENTRY_POINT 0
+"];
+0->1;
+1[label="Node Type: IF 1
+
+EXPRESSION:
+! hasRole(role,account)
+
+IRs:
+TMP_129(bool) = INTERNAL_CALL, AccessControl.hasRole(bytes32,address)(role,account)
+TMP_130 = UnaryType.BANG TMP_129 
+CONDITION TMP_130"];
+1->2[label="True"];
+1->5[label="False"];
+2[label="Node Type: EXPRESSION 2
+
+EXPRESSION:
+_roles[role].hasRole[account] = true
+
+IRs:
+REF_32(AccessControl.RoleData) -> _roles[role]
+REF_33(mapping(address => bool)) -> REF_32.hasRole
+REF_34(bool) -> REF_33[account]
+REF_34(bool) (->_roles) := True(bool)"];
+2->3;
+3[label="Node Type: EXPRESSION 3
+
+EXPRESSION:
+RoleGranted(role,account,_msgSender())
+
+IRs:
+TMP_131(address) = INTERNAL_CALL, Context._msgSender()()
+Emit RoleGranted(role,account,TMP_131)"];
+3->4;
+4[label="Node Type: RETURN 4
+
+EXPRESSION:
+true
+
+IRs:
+RETURN True"];
+5[label="Node Type: RETURN 5
+
+EXPRESSION:
+false
+
+IRs:
+RETURN False"];
+}

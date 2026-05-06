@@ -1,0 +1,48 @@
+digraph{
+0[label="Node Type: ENTRY_POINT 0
+"];
+0->1;
+1[label="Node Type: EXPRESSION 1
+
+EXPRESSION:
+require(bool,string)(amount > 0,Amount must be positive)
+
+IRs:
+TMP_261(bool) = amount > 0
+TMP_262(None) = SOLIDITY_CALL require(bool,string)(TMP_261,Amount must be positive)"];
+1->2;
+2[label="Node Type: EXPRESSION 2
+
+EXPRESSION:
+require(bool,string)(msg.value == amount,Incorrect ETH sent)
+
+IRs:
+TMP_263(bool) = msg.value == amount
+TMP_264(None) = SOLIDITY_CALL require(bool,string)(TMP_263,Incorrect ETH sent)"];
+2->3;
+3[label="Node Type: EXPRESSION 3
+
+EXPRESSION:
+balances[msg.sender] += amount
+
+IRs:
+REF_56(uint256) -> balances[msg.sender]
+REF_56(-> balances) = REF_56 (c)+ amount"];
+3->4;
+4[label="Node Type: EXPRESSION 4
+
+EXPRESSION:
+totalValue += amount
+
+IRs:
+totalValue(uint256) = totalValue (c)+ amount"];
+4->5;
+5[label="Node Type: EXPRESSION 5
+
+EXPRESSION:
+assert(bool)(totalValue >= amount)
+
+IRs:
+TMP_265(bool) = totalValue >= amount
+TMP_266(None) = SOLIDITY_CALL assert(bool)(TMP_265)"];
+}

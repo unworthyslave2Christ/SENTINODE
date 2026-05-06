@@ -1,0 +1,20 @@
+digraph{
+0[label="Node Type: ENTRY_POINT 0
+"];
+0->1;
+1[label="Node Type: EXPRESSION 1
+
+EXPRESSION:
+i_rebaseToken.mint(msg.sender,msg.value)
+
+IRs:
+HIGH_LEVEL_CALL, dest:i_rebaseToken(IRebaseToken), function:mint, arguments:['msg.sender', 'msg.value']  "];
+1->2;
+2[label="Node Type: EXPRESSION 2
+
+EXPRESSION:
+Deposit(msg.sender,msg.value)
+
+IRs:
+Emit Deposit(msg.sender,msg.value)"];
+}
