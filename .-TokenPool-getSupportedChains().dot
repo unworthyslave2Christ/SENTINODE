@@ -1,0 +1,75 @@
+digraph{
+0[label="Node Type: ENTRY_POINT 0
+"];
+0->1;
+1[label="Node Type: NEW VARIABLE 1
+
+EXPRESSION:
+uint256ChainSelectors = s_remoteChainSelectors.values()
+
+IRs:
+TMP_193(uint256[]) = LIBRARY_CALL, dest:EnumerableSet, function:EnumerableSet.values(EnumerableSet.UintSet), arguments:['s_remoteChainSelectors'] 
+uint256ChainSelectors(uint256[]) = ['TMP_193(uint256[])']"];
+1->2;
+2[label="Node Type: NEW VARIABLE 2
+
+EXPRESSION:
+chainSelectors = new uint64[](uint256ChainSelectors.length)
+
+IRs:
+REF_83 -> LENGTH uint256ChainSelectors
+TMP_195(uint64[])  = new uint64[](REF_83)
+chainSelectors(uint64[]) = ['TMP_195(uint64[])']"];
+2->5;
+3[label="Node Type: BEGIN_LOOP 3
+"];
+3->6;
+4[label="Node Type: END_LOOP 4
+"];
+4->9;
+5[label="Node Type: NEW VARIABLE 5
+
+EXPRESSION:
+i = 0
+
+IRs:
+i(uint256) := 0(uint256)"];
+5->3;
+6[label="Node Type: IF_LOOP 6
+
+EXPRESSION:
+i < uint256ChainSelectors.length
+
+IRs:
+REF_84 -> LENGTH uint256ChainSelectors
+TMP_196(bool) = i < REF_84
+CONDITION TMP_196"];
+6->7[label="True"];
+6->4[label="False"];
+7[label="Node Type: EXPRESSION 7
+
+EXPRESSION:
+chainSelectors[i] = uint64(uint256ChainSelectors[i])
+
+IRs:
+REF_85(uint64) -> chainSelectors[i]
+REF_86(uint256) -> uint256ChainSelectors[i]
+TMP_197 = CONVERT REF_86 to uint64
+REF_85(uint64) (->chainSelectors) := TMP_197(uint64)"];
+7->8;
+8[label="Node Type: EXPRESSION 8
+
+EXPRESSION:
+++ i
+
+IRs:
+i(uint256) = i (c)+ 1"];
+8->6;
+9[label="Node Type: RETURN 9
+
+EXPRESSION:
+chainSelectors
+
+IRs:
+RETURN chainSelectors"];
+}

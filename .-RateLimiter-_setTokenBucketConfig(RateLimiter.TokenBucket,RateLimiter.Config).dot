@@ -1,0 +1,102 @@
+digraph{
+0[label="Node Type: ENTRY_POINT 0
+"];
+0->1;
+1[label="Node Type: NEW VARIABLE 1
+
+EXPRESSION:
+timeDiff = block.timestamp - s_bucket.lastUpdated
+
+IRs:
+REF_17(uint32) -> s_bucket.lastUpdated
+TMP_43(uint256) = block.timestamp (c)- REF_17
+timeDiff(uint256) := TMP_43(uint256)"];
+1->2;
+2[label="Node Type: IF 2
+
+EXPRESSION:
+timeDiff != 0
+
+IRs:
+TMP_44(bool) = timeDiff != 0
+CONDITION TMP_44"];
+2->3[label="True"];
+2->5[label="False"];
+3[label="Node Type: EXPRESSION 3
+
+EXPRESSION:
+s_bucket.tokens = uint128(_calculateRefill(s_bucket.capacity,s_bucket.tokens,timeDiff,s_bucket.rate))
+
+IRs:
+REF_18(uint128) -> s_bucket.tokens
+REF_19(uint128) -> s_bucket.capacity
+REF_20(uint128) -> s_bucket.tokens
+REF_21(uint128) -> s_bucket.rate
+TMP_45(uint256) = INTERNAL_CALL, RateLimiter._calculateRefill(uint256,uint256,uint256,uint256)(REF_19,REF_20,timeDiff,REF_21)
+TMP_46 = CONVERT TMP_45 to uint128
+REF_18(uint128) (->s_bucket) := TMP_46(uint128)"];
+3->4;
+4[label="Node Type: EXPRESSION 4
+
+EXPRESSION:
+s_bucket.lastUpdated = uint32(block.timestamp)
+
+IRs:
+REF_22(uint32) -> s_bucket.lastUpdated
+TMP_47 = CONVERT block.timestamp to uint32
+REF_22(uint32) (->s_bucket) := TMP_47(uint32)"];
+4->5;
+5[label="Node Type: END_IF 5
+"];
+5->6;
+6[label="Node Type: EXPRESSION 6
+
+EXPRESSION:
+s_bucket.tokens = uint128(_min(config.capacity,s_bucket.tokens))
+
+IRs:
+REF_23(uint128) -> s_bucket.tokens
+REF_24(uint128) -> config.capacity
+REF_25(uint128) -> s_bucket.tokens
+TMP_48(uint256) = INTERNAL_CALL, RateLimiter._min(uint256,uint256)(REF_24,REF_25)
+TMP_49 = CONVERT TMP_48 to uint128
+REF_23(uint128) (->s_bucket) := TMP_49(uint128)"];
+6->7;
+7[label="Node Type: EXPRESSION 7
+
+EXPRESSION:
+s_bucket.isEnabled = config.isEnabled
+
+IRs:
+REF_26(bool) -> s_bucket.isEnabled
+REF_27(bool) -> config.isEnabled
+REF_26(bool) (->s_bucket) := REF_27(bool)"];
+7->8;
+8[label="Node Type: EXPRESSION 8
+
+EXPRESSION:
+s_bucket.capacity = config.capacity
+
+IRs:
+REF_28(uint128) -> s_bucket.capacity
+REF_29(uint128) -> config.capacity
+REF_28(uint128) (->s_bucket) := REF_29(uint128)"];
+8->9;
+9[label="Node Type: EXPRESSION 9
+
+EXPRESSION:
+s_bucket.rate = config.rate
+
+IRs:
+REF_30(uint128) -> s_bucket.rate
+REF_31(uint128) -> config.rate
+REF_30(uint128) (->s_bucket) := REF_31(uint128)"];
+9->10;
+10[label="Node Type: EXPRESSION 10
+
+EXPRESSION:
+ConfigChanged(config)
+
+IRs:
+Emit ConfigChanged(config)"];
+}

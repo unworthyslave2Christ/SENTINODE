@@ -1,0 +1,28 @@
+digraph{
+0[label="Node Type: ENTRY_POINT 0
+"];
+0->1;
+1[label="Node Type: IF 1
+
+EXPRESSION:
+owner() != _msgSender()
+
+IRs:
+TMP_519(address) = INTERNAL_CALL, Ownable.owner()()
+TMP_520(address) = INTERNAL_CALL, Context._msgSender()()
+TMP_521(bool) = TMP_519 != TMP_520
+CONDITION TMP_521"];
+1->2[label="True"];
+1->3[label="False"];
+2[label="Node Type: EXPRESSION 2
+
+EXPRESSION:
+revert OwnableUnauthorizedAccount(address)(_msgSender())
+
+IRs:
+TMP_522(address) = INTERNAL_CALL, Context._msgSender()()
+TMP_523(None) = SOLIDITY_CALL revert OwnableUnauthorizedAccount(address)(TMP_522)"];
+2->3;
+3[label="Node Type: END_IF 3
+"];
+}

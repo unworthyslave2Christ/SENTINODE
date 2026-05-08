@@ -1,0 +1,77 @@
+digraph{
+0[label="Node Type: ENTRY_POINT 0
+"];
+0->1;
+1[label="Node Type: NEW VARIABLE 1
+
+EXPRESSION:
+remotePoolHashes = s_remoteChainConfigs[remoteChainSelector].remotePools.values()
+
+IRs:
+REF_65(TokenPool.RemoteChainConfig) -> s_remoteChainConfigs[remoteChainSelector]
+REF_66(EnumerableSet.Bytes32Set) -> REF_65.remotePools
+TMP_172(bytes32[]) = LIBRARY_CALL, dest:EnumerableSet, function:EnumerableSet.values(EnumerableSet.Bytes32Set), arguments:['REF_66'] 
+remotePoolHashes(bytes32[]) = ['TMP_172(bytes32[])']"];
+1->2;
+2[label="Node Type: NEW VARIABLE 2
+
+EXPRESSION:
+remotePools = new bytes[](remotePoolHashes.length)
+
+IRs:
+REF_68 -> LENGTH remotePoolHashes
+TMP_174(bytes[])  = new bytes[](REF_68)
+remotePools(bytes[]) = ['TMP_174(bytes[])']"];
+2->5;
+3[label="Node Type: BEGIN_LOOP 3
+"];
+3->6;
+4[label="Node Type: END_LOOP 4
+"];
+4->9;
+5[label="Node Type: NEW VARIABLE 5
+
+EXPRESSION:
+i = 0
+
+IRs:
+i(uint256) := 0(uint256)"];
+5->3;
+6[label="Node Type: IF_LOOP 6
+
+EXPRESSION:
+i < remotePoolHashes.length
+
+IRs:
+REF_69 -> LENGTH remotePoolHashes
+TMP_175(bool) = i < REF_69
+CONDITION TMP_175"];
+6->7[label="True"];
+6->4[label="False"];
+7[label="Node Type: EXPRESSION 7
+
+EXPRESSION:
+remotePools[i] = s_remotePoolAddresses[remotePoolHashes[i]]
+
+IRs:
+REF_70(bytes) -> remotePools[i]
+REF_71(bytes32) -> remotePoolHashes[i]
+REF_72(bytes) -> s_remotePoolAddresses[REF_71]
+REF_70(bytes) (->remotePools) := REF_72(bytes)"];
+7->8;
+8[label="Node Type: EXPRESSION 8
+
+EXPRESSION:
+++ i
+
+IRs:
+i(uint256) = i (c)+ 1"];
+8->6;
+9[label="Node Type: RETURN 9
+
+EXPRESSION:
+remotePools
+
+IRs:
+RETURN remotePools"];
+}

@@ -1,0 +1,41 @@
+digraph{
+0[label="Node Type: ENTRY_POINT 0
+"];
+0->1;
+1[label="Node Type: IF 1
+
+EXPRESSION:
+to == msg.sender
+
+IRs:
+TMP_318(bool) = to == msg.sender
+CONDITION TMP_318"];
+1->2[label="True"];
+1->3[label="False"];
+2[label="Node Type: EXPRESSION 2
+
+EXPRESSION:
+revert CannotTransferToSelf()()
+
+IRs:
+TMP_319(None) = SOLIDITY_CALL revert CannotTransferToSelf()()"];
+2->3;
+3[label="Node Type: END_IF 3
+"];
+3->4;
+4[label="Node Type: EXPRESSION 4
+
+EXPRESSION:
+s_pendingOwner = to
+
+IRs:
+s_pendingOwner(address) := to(address)"];
+4->5;
+5[label="Node Type: EXPRESSION 5
+
+EXPRESSION:
+OwnershipTransferRequested(s_owner,to)
+
+IRs:
+Emit OwnershipTransferRequested(s_owner,to)"];
+}

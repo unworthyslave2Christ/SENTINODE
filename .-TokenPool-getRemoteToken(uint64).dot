@@ -1,0 +1,14 @@
+digraph{
+0[label="Node Type: ENTRY_POINT 0
+"];
+0->1;
+1[label="Node Type: RETURN 1
+
+EXPRESSION:
+s_remoteChainConfigs[remoteChainSelector].remoteTokenAddress
+
+IRs:
+REF_76(TokenPool.RemoteChainConfig) -> s_remoteChainConfigs[remoteChainSelector]
+REF_77(bytes) -> REF_76.remoteTokenAddress
+RETURN REF_77"];
+}

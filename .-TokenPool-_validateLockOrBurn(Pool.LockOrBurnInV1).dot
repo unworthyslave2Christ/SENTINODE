@@ -1,0 +1,81 @@
+digraph{
+0[label="Node Type: ENTRY_POINT 0
+"];
+0->1;
+1[label="Node Type: IF 1
+
+EXPRESSION:
+! isSupportedToken(lockOrBurnIn.localToken)
+
+IRs:
+REF_43(address) -> lockOrBurnIn.localToken
+TMP_120(bool) = INTERNAL_CALL, TokenPool.isSupportedToken(address)(REF_43)
+TMP_121 = UnaryType.BANG TMP_120 
+CONDITION TMP_121"];
+1->2[label="True"];
+1->3[label="False"];
+2[label="Node Type: EXPRESSION 2
+
+EXPRESSION:
+revert InvalidToken(address)(lockOrBurnIn.localToken)
+
+IRs:
+REF_44(address) -> lockOrBurnIn.localToken
+TMP_122(None) = SOLIDITY_CALL revert InvalidToken(address)(REF_44)"];
+2->3;
+3[label="Node Type: END_IF 3
+"];
+3->4;
+4[label="Node Type: IF 4
+
+EXPRESSION:
+IRMN(i_rmnProxy).isCursed(bytes16(uint128(lockOrBurnIn.remoteChainSelector)))
+
+IRs:
+TMP_123 = CONVERT i_rmnProxy to IRMN
+REF_46(uint64) -> lockOrBurnIn.remoteChainSelector
+TMP_124 = CONVERT REF_46 to uint128
+TMP_125 = CONVERT TMP_124 to bytes16
+TMP_126(bool) = HIGH_LEVEL_CALL, dest:TMP_123(IRMN), function:isCursed, arguments:['TMP_125']  
+CONDITION TMP_126"];
+4->5[label="True"];
+4->6[label="False"];
+5[label="Node Type: EXPRESSION 5
+
+EXPRESSION:
+revert CursedByRMN()()
+
+IRs:
+TMP_127(None) = SOLIDITY_CALL revert CursedByRMN()()"];
+5->6;
+6[label="Node Type: END_IF 6
+"];
+6->7;
+7[label="Node Type: EXPRESSION 7
+
+EXPRESSION:
+_checkAllowList(lockOrBurnIn.originalSender)
+
+IRs:
+REF_47(address) -> lockOrBurnIn.originalSender
+INTERNAL_CALL, TokenPool._checkAllowList(address)(REF_47)"];
+7->8;
+8[label="Node Type: EXPRESSION 8
+
+EXPRESSION:
+_onlyOnRamp(lockOrBurnIn.remoteChainSelector)
+
+IRs:
+REF_48(uint64) -> lockOrBurnIn.remoteChainSelector
+INTERNAL_CALL, TokenPool._onlyOnRamp(uint64)(REF_48)"];
+8->9;
+9[label="Node Type: EXPRESSION 9
+
+EXPRESSION:
+_consumeOutboundRateLimit(lockOrBurnIn.remoteChainSelector,lockOrBurnIn.amount)
+
+IRs:
+REF_49(uint64) -> lockOrBurnIn.remoteChainSelector
+REF_50(uint256) -> lockOrBurnIn.amount
+INTERNAL_CALL, TokenPool._consumeOutboundRateLimit(uint64,uint256)(REF_49,REF_50)"];
+}

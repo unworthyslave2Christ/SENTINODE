@@ -1,0 +1,20 @@
+digraph{
+0[label="Node Type: ENTRY_POINT 0
+"];
+0->1;
+1[label="Node Type: RETURN 1
+
+EXPRESSION:
+abi.encodeWithSelector(SVM_EXTRA_ARGS_V1_TAG,extraArgs)
+
+IRs:
+TMP_2(bytes) = SOLIDITY_CALL abi.encodeWithSelector()(SVM_EXTRA_ARGS_V1_TAG,extraArgs)
+RETURN TMP_2"];
+2[label="Node Type: RETURN 2
+
+EXPRESSION:
+bts
+
+IRs:
+RETURN bts"];
+}

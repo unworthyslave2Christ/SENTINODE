@@ -1,0 +1,137 @@
+digraph{
+0[label="Node Type: ENTRY_POINT 0
+"];
+0->1;
+1[label="Node Type: IF 1
+
+EXPRESSION:
+address(token) == address(0) || router == address(0) || rmnProxy == address(0)
+
+IRs:
+TMP_637 = CONVERT token to address
+TMP_638 = CONVERT 0 to address
+TMP_639(bool) = TMP_637 == TMP_638
+TMP_640 = CONVERT 0 to address
+TMP_641(bool) = router == TMP_640
+TMP_642(bool) = TMP_639 || TMP_641
+TMP_643 = CONVERT 0 to address
+TMP_644(bool) = rmnProxy == TMP_643
+TMP_645(bool) = TMP_642 || TMP_644
+CONDITION TMP_645"];
+1->2[label="True"];
+1->3[label="False"];
+2[label="Node Type: EXPRESSION 2
+
+EXPRESSION:
+revert ZeroAddressNotAllowed()()
+
+IRs:
+TMP_646(None) = SOLIDITY_CALL revert ZeroAddressNotAllowed()()"];
+2->3;
+3[label="Node Type: END_IF 3
+"];
+3->4;
+4[label="Node Type: EXPRESSION 4
+
+EXPRESSION:
+i_token = token
+
+IRs:
+i_token(IERC20) := token(IERC20)"];
+4->5;
+5[label="Node Type: EXPRESSION 5
+
+EXPRESSION:
+i_rmnProxy = rmnProxy
+
+IRs:
+i_rmnProxy(address) := rmnProxy(address)"];
+5->6;
+6[label="Node Type: TRY 6
+
+EXPRESSION:
+actualTokenDecimals = IERC20Metadata(address(token)).decimals()
+
+IRs:
+TMP_647 = CONVERT token to address
+TMP_648 = CONVERT TMP_647 to IERC20Metadata
+TMP_649(uint8) = HIGH_LEVEL_CALL, dest:TMP_648(IERC20Metadata), function:decimals, arguments:[]  
+actualTokenDecimals(uint8) := TMP_649(uint8)"];
+6->7;
+6->11;
+6->12;
+7[label="Node Type: CATCH 7
+"];
+7->8;
+8[label="Node Type: IF 8
+
+EXPRESSION:
+localTokenDecimals != actualTokenDecimals
+
+IRs:
+TMP_650(bool) = localTokenDecimals != actualTokenDecimals
+CONDITION TMP_650"];
+8->9[label="True"];
+8->10[label="False"];
+9[label="Node Type: EXPRESSION 9
+
+EXPRESSION:
+revert InvalidDecimalArgs(uint8,uint8)(localTokenDecimals,actualTokenDecimals)
+
+IRs:
+TMP_651(None) = SOLIDITY_CALL revert InvalidDecimalArgs(uint8,uint8)(localTokenDecimals,actualTokenDecimals)"];
+9->10;
+10[label="Node Type: END_IF 10
+"];
+10->12;
+11[label="Node Type: CATCH 11
+"];
+11->12;
+12[label="Node Type: EXPRESSION 12
+
+EXPRESSION:
+i_tokenDecimals = localTokenDecimals
+
+IRs:
+i_tokenDecimals(uint8) := localTokenDecimals(uint8)"];
+12->13;
+13[label="Node Type: EXPRESSION 13
+
+EXPRESSION:
+s_router = IRouter(router)
+
+IRs:
+TMP_652 = CONVERT router to IRouter
+s_router(IRouter) := TMP_652(IRouter)"];
+13->14;
+14[label="Node Type: EXPRESSION 14
+
+EXPRESSION:
+i_allowlistEnabled = allowlist.length > 0
+
+IRs:
+REF_293 -> LENGTH allowlist
+TMP_653(bool) = REF_293 > 0
+i_allowlistEnabled(bool) := TMP_653(bool)"];
+14->15;
+15[label="Node Type: IF 15
+
+EXPRESSION:
+i_allowlistEnabled
+
+IRs:
+CONDITION i_allowlistEnabled"];
+15->16[label="True"];
+15->17[label="False"];
+16[label="Node Type: EXPRESSION 16
+
+EXPRESSION:
+_applyAllowListUpdates(new address[](0),allowlist)
+
+IRs:
+TMP_655(address[])  = new address[](0)
+INTERNAL_CALL, TokenPool._applyAllowListUpdates(address[],address[])(TMP_655,allowlist)"];
+16->17;
+17[label="Node Type: END_IF 17
+"];
+}

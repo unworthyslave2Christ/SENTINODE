@@ -1,0 +1,67 @@
+digraph{
+0[label="Node Type: ENTRY_POINT 0
+"];
+0->8;
+1[label="Node Type: IF 1
+
+EXPRESSION:
+! isSupportedChain(remoteChainSelector)
+
+IRs:
+TMP_737(bool) = INTERNAL_CALL, TokenPool.isSupportedChain(uint64)(remoteChainSelector)
+TMP_738 = UnaryType.BANG TMP_737 
+CONDITION TMP_738"];
+1->2[label="True"];
+1->3[label="False"];
+2[label="Node Type: EXPRESSION 2
+
+EXPRESSION:
+revert NonExistentChain(uint64)(remoteChainSelector)
+
+IRs:
+TMP_739(None) = SOLIDITY_CALL revert NonExistentChain(uint64)(remoteChainSelector)"];
+2->3;
+3[label="Node Type: END_IF 3
+"];
+3->4;
+4[label="Node Type: IF 4
+
+EXPRESSION:
+! s_remoteChainConfigs[remoteChainSelector].remotePools.remove(keccak256(bytes)(remotePoolAddress))
+
+IRs:
+REF_332(TokenPool.RemoteChainConfig) -> s_remoteChainConfigs[remoteChainSelector]
+REF_333(EnumerableSet.Bytes32Set) -> REF_332.remotePools
+TMP_740(bytes32) = SOLIDITY_CALL keccak256(bytes)(remotePoolAddress)
+TMP_741(bool) = LIBRARY_CALL, dest:EnumerableSet, function:EnumerableSet.remove(EnumerableSet.Bytes32Set,bytes32), arguments:['REF_333', 'TMP_740'] 
+TMP_742 = UnaryType.BANG TMP_741 
+CONDITION TMP_742"];
+4->5[label="True"];
+4->6[label="False"];
+5[label="Node Type: EXPRESSION 5
+
+EXPRESSION:
+revert InvalidRemotePoolForChain(uint64,bytes)(remoteChainSelector,remotePoolAddress)
+
+IRs:
+TMP_743(None) = SOLIDITY_CALL revert InvalidRemotePoolForChain(uint64,bytes)(remoteChainSelector,remotePoolAddress)"];
+5->6;
+6[label="Node Type: END_IF 6
+"];
+6->7;
+7[label="Node Type: EXPRESSION 7
+
+EXPRESSION:
+RemotePoolRemoved(remoteChainSelector,remotePoolAddress)
+
+IRs:
+Emit RemotePoolRemoved(remoteChainSelector,remotePoolAddress)"];
+8[label="Node Type: EXPRESSION 8
+
+EXPRESSION:
+onlyOwner()
+
+IRs:
+MODIFIER_CALL, Ownable2Step.onlyOwner()()"];
+8->1;
+}

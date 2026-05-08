@@ -1,0 +1,16 @@
+digraph{
+0[label="Node Type: ENTRY_POINT 0
+"];
+0->1;
+1[label="Node Type: RETURN 1
+
+EXPRESSION:
+super.balanceOf(_user) * _calculateUserAccumulatedInterestSinceLastUpdate(_user) / PRECISION_FACTOR
+
+IRs:
+TMP_607(uint256) = INTERNAL_CALL, ERC20.balanceOf(address)(_user)
+TMP_608(uint256) = INTERNAL_CALL, RebaseToken._calculateUserAccumulatedInterestSinceLastUpdate(address)(_user)
+TMP_609(uint256) = TMP_607 (c)* TMP_608
+TMP_610(uint256) = TMP_609 (c)/ PRECISION_FACTOR
+RETURN TMP_610"];
+}

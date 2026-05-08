@@ -1,0 +1,76 @@
+digraph{
+0[label="Node Type: ENTRY_POINT 0
+"];
+0->1;
+1[label="Node Type: EXPRESSION 1
+
+EXPRESSION:
+_mintAccruedInterest(msg.sender)
+
+IRs:
+INTERNAL_CALL, RebaseToken._mintAccruedInterest(address)(msg.sender)"];
+1->2;
+2[label="Node Type: EXPRESSION 2
+
+EXPRESSION:
+_mintAccruedInterest(_recipient)
+
+IRs:
+INTERNAL_CALL, RebaseToken._mintAccruedInterest(address)(_recipient)"];
+2->3;
+3[label="Node Type: IF 3
+
+EXPRESSION:
+_amount >= type()(uint256).max
+
+IRs:
+TMP_614(uint256) := 115792089237316195423570985008687907853269984665640564039457584007913129639935(uint256)
+TMP_615(bool) = _amount >= TMP_614
+CONDITION TMP_615"];
+3->4[label="True"];
+3->5[label="False"];
+4[label="Node Type: EXPRESSION 4
+
+EXPRESSION:
+_amount = balanceOf(msg.sender)
+
+IRs:
+TMP_616(uint256) = INTERNAL_CALL, RebaseToken.balanceOf(address)(msg.sender)
+_amount(uint256) := TMP_616(uint256)"];
+4->5;
+5[label="Node Type: END_IF 5
+"];
+5->6;
+6[label="Node Type: IF 6
+
+EXPRESSION:
+balanceOf(_recipient) == 0
+
+IRs:
+TMP_617(uint256) = INTERNAL_CALL, RebaseToken.balanceOf(address)(_recipient)
+TMP_618(bool) = TMP_617 == 0
+CONDITION TMP_618"];
+6->7[label="True"];
+6->8[label="False"];
+7[label="Node Type: EXPRESSION 7
+
+EXPRESSION:
+s_userInterestRate[_recipient] = s_userInterestRate[msg.sender]
+
+IRs:
+REF_285(uint256) -> s_userInterestRate[_recipient]
+REF_286(uint256) -> s_userInterestRate[msg.sender]
+REF_285(uint256) (->s_userInterestRate) := REF_286(uint256)"];
+7->8;
+8[label="Node Type: END_IF 8
+"];
+8->9;
+9[label="Node Type: RETURN 9
+
+EXPRESSION:
+super.transfer(_recipient,_amount)
+
+IRs:
+TMP_619(bool) = INTERNAL_CALL, ERC20.transfer(address,uint256)(_recipient,_amount)
+RETURN TMP_619"];
+}

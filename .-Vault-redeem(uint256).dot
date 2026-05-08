@@ -1,0 +1,77 @@
+digraph{
+0[label="Node Type: ENTRY_POINT 0
+"];
+0->1;
+1[label="Node Type: IF 1
+
+EXPRESSION:
+_amount >= type()(uint256).max
+
+IRs:
+TMP_902(uint256) := 115792089237316195423570985008687907853269984665640564039457584007913129639935(uint256)
+TMP_903(bool) = _amount >= TMP_902
+CONDITION TMP_903"];
+1->2[label="True"];
+1->3[label="False"];
+2[label="Node Type: EXPRESSION 2
+
+EXPRESSION:
+_amount = i_rebaseToken.balanceOf(msg.sender)
+
+IRs:
+TMP_904(uint256) = HIGH_LEVEL_CALL, dest:i_rebaseToken(IRebaseToken), function:balanceOf, arguments:['msg.sender']  
+_amount(uint256) := TMP_904(uint256)"];
+2->3;
+3[label="Node Type: END_IF 3
+"];
+3->4;
+4[label="Node Type: EXPRESSION 4
+
+EXPRESSION:
+i_rebaseToken.burn(msg.sender,_amount)
+
+IRs:
+HIGH_LEVEL_CALL, dest:i_rebaseToken(IRebaseToken), function:burn, arguments:['msg.sender', '_amount']  "];
+4->5;
+5[label="Node Type: NEW VARIABLE 5
+"];
+5->6;
+6[label="Node Type: EXPRESSION 6
+
+EXPRESSION:
+(success,None) = address(msg.sender).call{value: _amount}()
+
+IRs:
+TMP_906 = CONVERT msg.sender to address
+TUPLE_0(bool,bytes) = LOW_LEVEL_CALL, dest:TMP_906, function:call, arguments:[''] value:_amount 
+success(bool)= UNPACK TUPLE_0 index: 0 "];
+6->7;
+7[label="Node Type: IF 7
+
+EXPRESSION:
+! success
+
+IRs:
+TMP_907 = UnaryType.BANG success 
+CONDITION TMP_907"];
+7->8[label="True"];
+7->9[label="False"];
+8[label="Node Type: EXPRESSION 8
+
+EXPRESSION:
+revert Vault__RedeemFailed()()
+
+IRs:
+TMP_908(None) = SOLIDITY_CALL revert Vault__RedeemFailed()()"];
+8->9;
+9[label="Node Type: END_IF 9
+"];
+9->10;
+10[label="Node Type: EXPRESSION 10
+
+EXPRESSION:
+Redeem(msg.sender,_amount)
+
+IRs:
+Emit Redeem(msg.sender,_amount)"];
+}

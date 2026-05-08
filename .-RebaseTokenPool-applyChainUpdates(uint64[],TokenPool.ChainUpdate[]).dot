@@ -1,0 +1,370 @@
+digraph{
+0[label="Node Type: ENTRY_POINT 0
+"];
+0->44;
+1[label="Node Type: BEGIN_LOOP 1
+"];
+1->4;
+2[label="Node Type: END_LOOP 2
+"];
+2->21;
+3[label="Node Type: NEW VARIABLE 3
+
+EXPRESSION:
+i = 0
+
+IRs:
+i(uint256) := 0(uint256)"];
+3->1;
+4[label="Node Type: IF_LOOP 4
+
+EXPRESSION:
+i < remoteChainSelectorsToRemove.length
+
+IRs:
+REF_341 -> LENGTH remoteChainSelectorsToRemove
+TMP_752(bool) = i < REF_341
+CONDITION TMP_752"];
+4->5[label="True"];
+4->2[label="False"];
+5[label="Node Type: NEW VARIABLE 5
+
+EXPRESSION:
+remoteChainSelectorToRemove = remoteChainSelectorsToRemove[i]
+
+IRs:
+REF_342(uint64) -> remoteChainSelectorsToRemove[i]
+remoteChainSelectorToRemove(uint64) := REF_342(uint64)"];
+5->6;
+6[label="Node Type: IF 6
+
+EXPRESSION:
+! s_remoteChainSelectors.remove(remoteChainSelectorToRemove)
+
+IRs:
+TMP_753(bool) = LIBRARY_CALL, dest:EnumerableSet, function:EnumerableSet.remove(EnumerableSet.UintSet,uint256), arguments:['s_remoteChainSelectors', 'remoteChainSelectorToRemove'] 
+TMP_754 = UnaryType.BANG TMP_753 
+CONDITION TMP_754"];
+6->7[label="True"];
+6->8[label="False"];
+7[label="Node Type: EXPRESSION 7
+
+EXPRESSION:
+revert NonExistentChain(uint64)(remoteChainSelectorToRemove)
+
+IRs:
+TMP_755(None) = SOLIDITY_CALL revert NonExistentChain(uint64)(remoteChainSelectorToRemove)"];
+7->8;
+8[label="Node Type: END_IF 8
+"];
+8->9;
+9[label="Node Type: NEW VARIABLE 9
+
+EXPRESSION:
+remotePools = s_remoteChainConfigs[remoteChainSelectorToRemove].remotePools.values()
+
+IRs:
+REF_344(TokenPool.RemoteChainConfig) -> s_remoteChainConfigs[remoteChainSelectorToRemove]
+REF_345(EnumerableSet.Bytes32Set) -> REF_344.remotePools
+TMP_756(bytes32[]) = LIBRARY_CALL, dest:EnumerableSet, function:EnumerableSet.values(EnumerableSet.Bytes32Set), arguments:['REF_345'] 
+remotePools(bytes32[]) = ['TMP_756(bytes32[])']"];
+9->12;
+10[label="Node Type: BEGIN_LOOP 10
+"];
+10->13;
+11[label="Node Type: END_LOOP 11
+"];
+11->16;
+12[label="Node Type: NEW VARIABLE 12
+
+EXPRESSION:
+j = 0
+
+IRs:
+j(uint256) := 0(uint256)"];
+12->10;
+13[label="Node Type: IF_LOOP 13
+
+EXPRESSION:
+j < remotePools.length
+
+IRs:
+REF_347 -> LENGTH remotePools
+TMP_757(bool) = j < REF_347
+CONDITION TMP_757"];
+13->14[label="True"];
+13->11[label="False"];
+14[label="Node Type: EXPRESSION 14
+
+EXPRESSION:
+s_remoteChainConfigs[remoteChainSelectorToRemove].remotePools.remove(remotePools[j])
+
+IRs:
+REF_348(TokenPool.RemoteChainConfig) -> s_remoteChainConfigs[remoteChainSelectorToRemove]
+REF_349(EnumerableSet.Bytes32Set) -> REF_348.remotePools
+REF_351(bytes32) -> remotePools[j]
+TMP_758(bool) = LIBRARY_CALL, dest:EnumerableSet, function:EnumerableSet.remove(EnumerableSet.Bytes32Set,bytes32), arguments:['REF_349', 'REF_351'] "];
+14->15;
+15[label="Node Type: EXPRESSION 15
+
+EXPRESSION:
+++ j
+
+IRs:
+j(uint256) = j (c)+ 1"];
+15->13;
+16[label="Node Type: EXPRESSION 16
+
+EXPRESSION:
+delete s_remoteChainConfigs[remoteChainSelectorToRemove]
+
+IRs:
+REF_352(TokenPool.RemoteChainConfig) -> s_remoteChainConfigs[remoteChainSelectorToRemove]
+s_remoteChainConfigs = delete REF_352 "];
+16->17;
+17[label="Node Type: EXPRESSION 17
+
+EXPRESSION:
+ChainRemoved(remoteChainSelectorToRemove)
+
+IRs:
+Emit ChainRemoved(remoteChainSelectorToRemove)"];
+17->18;
+18[label="Node Type: EXPRESSION 18
+
+EXPRESSION:
+++ i
+
+IRs:
+i(uint256) = i (c)+ 1"];
+18->4;
+19[label="Node Type: BEGIN_LOOP 19
+"];
+19->22;
+20[label="Node Type: END_LOOP 20
+"];
+21[label="Node Type: NEW VARIABLE 21
+
+EXPRESSION:
+i_scope_0 = 0
+
+IRs:
+i_scope_0(uint256) := 0(uint256)"];
+21->19;
+22[label="Node Type: IF_LOOP 22
+
+EXPRESSION:
+i_scope_0 < chainsToAdd.length
+
+IRs:
+REF_353 -> LENGTH chainsToAdd
+TMP_760(bool) = i_scope_0 < REF_353
+CONDITION TMP_760"];
+22->23[label="True"];
+22->20[label="False"];
+23[label="Node Type: NEW VARIABLE 23
+
+EXPRESSION:
+newChain = chainsToAdd[i_scope_0]
+
+IRs:
+REF_354(TokenPool.ChainUpdate) -> chainsToAdd[i_scope_0]
+newChain(TokenPool.ChainUpdate) := REF_354(TokenPool.ChainUpdate)"];
+23->24;
+24[label="Node Type: EXPRESSION 24
+
+EXPRESSION:
+RateLimiter._validateTokenBucketConfig(newChain.outboundRateLimiterConfig,false)
+
+IRs:
+REF_356(RateLimiter.Config) -> newChain.outboundRateLimiterConfig
+LIBRARY_CALL, dest:RateLimiter, function:RateLimiter._validateTokenBucketConfig(RateLimiter.Config,bool), arguments:['REF_356', 'False'] "];
+24->25;
+25[label="Node Type: EXPRESSION 25
+
+EXPRESSION:
+RateLimiter._validateTokenBucketConfig(newChain.inboundRateLimiterConfig,false)
+
+IRs:
+REF_358(RateLimiter.Config) -> newChain.inboundRateLimiterConfig
+LIBRARY_CALL, dest:RateLimiter, function:RateLimiter._validateTokenBucketConfig(RateLimiter.Config,bool), arguments:['REF_358', 'False'] "];
+25->26;
+26[label="Node Type: IF 26
+
+EXPRESSION:
+newChain.remoteTokenAddress.length == 0
+
+IRs:
+REF_359(bytes) -> newChain.remoteTokenAddress
+REF_360 -> LENGTH REF_359
+TMP_763(bool) = REF_360 == 0
+CONDITION TMP_763"];
+26->27[label="True"];
+26->28[label="False"];
+27[label="Node Type: EXPRESSION 27
+
+EXPRESSION:
+revert ZeroAddressNotAllowed()()
+
+IRs:
+TMP_764(None) = SOLIDITY_CALL revert ZeroAddressNotAllowed()()"];
+27->28;
+28[label="Node Type: END_IF 28
+"];
+28->29;
+29[label="Node Type: IF 29
+
+EXPRESSION:
+! s_remoteChainSelectors.add(newChain.remoteChainSelector)
+
+IRs:
+REF_362(uint64) -> newChain.remoteChainSelector
+TMP_765(bool) = LIBRARY_CALL, dest:EnumerableSet, function:EnumerableSet.add(EnumerableSet.UintSet,uint256), arguments:['s_remoteChainSelectors', 'REF_362'] 
+TMP_766 = UnaryType.BANG TMP_765 
+CONDITION TMP_766"];
+29->30[label="True"];
+29->31[label="False"];
+30[label="Node Type: EXPRESSION 30
+
+EXPRESSION:
+revert ChainAlreadyExists(uint64)(newChain.remoteChainSelector)
+
+IRs:
+REF_363(uint64) -> newChain.remoteChainSelector
+TMP_767(None) = SOLIDITY_CALL revert ChainAlreadyExists(uint64)(REF_363)"];
+30->31;
+31[label="Node Type: END_IF 31
+"];
+31->32;
+32[label="Node Type: NEW VARIABLE 32
+
+EXPRESSION:
+remoteChainConfig = s_remoteChainConfigs[newChain.remoteChainSelector]
+
+IRs:
+REF_364(uint64) -> newChain.remoteChainSelector
+REF_365(TokenPool.RemoteChainConfig) -> s_remoteChainConfigs[REF_364]
+remoteChainConfig(TokenPool.RemoteChainConfig) := REF_365(TokenPool.RemoteChainConfig)"];
+32->33;
+33[label="Node Type: EXPRESSION 33
+
+EXPRESSION:
+remoteChainConfig.outboundRateLimiterConfig = RateLimiter.TokenBucket({rate:newChain.outboundRateLimiterConfig.rate,capacity:newChain.outboundRateLimiterConfig.capacity,tokens:newChain.outboundRateLimiterConfig.capacity,lastUpdated:uint32(block.timestamp),isEnabled:newChain.outboundRateLimiterConfig.isEnabled})
+
+IRs:
+REF_366(RateLimiter.TokenBucket) -> remoteChainConfig.outboundRateLimiterConfig
+REF_368(RateLimiter.Config) -> newChain.outboundRateLimiterConfig
+REF_369(uint128) -> REF_368.rate
+REF_370(RateLimiter.Config) -> newChain.outboundRateLimiterConfig
+REF_371(uint128) -> REF_370.capacity
+REF_372(RateLimiter.Config) -> newChain.outboundRateLimiterConfig
+REF_373(uint128) -> REF_372.capacity
+TMP_768 = CONVERT block.timestamp to uint32
+REF_374(RateLimiter.Config) -> newChain.outboundRateLimiterConfig
+REF_375(bool) -> REF_374.isEnabled
+TMP_769(RateLimiter.TokenBucket) = new TokenBucket(REF_373,TMP_768,REF_375,REF_371,REF_369)
+REF_366(RateLimiter.TokenBucket) (->remoteChainConfig) := TMP_769(RateLimiter.TokenBucket)"];
+33->34;
+34[label="Node Type: EXPRESSION 34
+
+EXPRESSION:
+remoteChainConfig.inboundRateLimiterConfig = RateLimiter.TokenBucket({rate:newChain.inboundRateLimiterConfig.rate,capacity:newChain.inboundRateLimiterConfig.capacity,tokens:newChain.inboundRateLimiterConfig.capacity,lastUpdated:uint32(block.timestamp),isEnabled:newChain.inboundRateLimiterConfig.isEnabled})
+
+IRs:
+REF_376(RateLimiter.TokenBucket) -> remoteChainConfig.inboundRateLimiterConfig
+REF_378(RateLimiter.Config) -> newChain.inboundRateLimiterConfig
+REF_379(uint128) -> REF_378.rate
+REF_380(RateLimiter.Config) -> newChain.inboundRateLimiterConfig
+REF_381(uint128) -> REF_380.capacity
+REF_382(RateLimiter.Config) -> newChain.inboundRateLimiterConfig
+REF_383(uint128) -> REF_382.capacity
+TMP_770 = CONVERT block.timestamp to uint32
+REF_384(RateLimiter.Config) -> newChain.inboundRateLimiterConfig
+REF_385(bool) -> REF_384.isEnabled
+TMP_771(RateLimiter.TokenBucket) = new TokenBucket(REF_383,TMP_770,REF_385,REF_381,REF_379)
+REF_376(RateLimiter.TokenBucket) (->remoteChainConfig) := TMP_771(RateLimiter.TokenBucket)"];
+34->35;
+35[label="Node Type: EXPRESSION 35
+
+EXPRESSION:
+remoteChainConfig.remoteTokenAddress = newChain.remoteTokenAddress
+
+IRs:
+REF_386(bytes) -> remoteChainConfig.remoteTokenAddress
+REF_387(bytes) -> newChain.remoteTokenAddress
+REF_386(bytes) (->remoteChainConfig) := REF_387(bytes)"];
+35->38;
+36[label="Node Type: BEGIN_LOOP 36
+"];
+36->39;
+37[label="Node Type: END_LOOP 37
+"];
+37->42;
+38[label="Node Type: NEW VARIABLE 38
+
+EXPRESSION:
+j_scope_1 = 0
+
+IRs:
+j_scope_1(uint256) := 0(uint256)"];
+38->36;
+39[label="Node Type: IF_LOOP 39
+
+EXPRESSION:
+j_scope_1 < newChain.remotePoolAddresses.length
+
+IRs:
+REF_388(bytes[]) -> newChain.remotePoolAddresses
+REF_389 -> LENGTH REF_388
+TMP_772(bool) = j_scope_1 < REF_389
+CONDITION TMP_772"];
+39->40[label="True"];
+39->37[label="False"];
+40[label="Node Type: EXPRESSION 40
+
+EXPRESSION:
+_setRemotePool(newChain.remoteChainSelector,newChain.remotePoolAddresses[j_scope_1])
+
+IRs:
+REF_390(uint64) -> newChain.remoteChainSelector
+REF_391(bytes[]) -> newChain.remotePoolAddresses
+REF_392(bytes) -> REF_391[j_scope_1]
+INTERNAL_CALL, TokenPool._setRemotePool(uint64,bytes)(REF_390,REF_392)"];
+40->41;
+41[label="Node Type: EXPRESSION 41
+
+EXPRESSION:
+++ j_scope_1
+
+IRs:
+j_scope_1(uint256) = j_scope_1 (c)+ 1"];
+41->39;
+42[label="Node Type: EXPRESSION 42
+
+EXPRESSION:
+ChainAdded(newChain.remoteChainSelector,newChain.remoteTokenAddress,newChain.outboundRateLimiterConfig,newChain.inboundRateLimiterConfig)
+
+IRs:
+REF_393(uint64) -> newChain.remoteChainSelector
+REF_394(bytes) -> newChain.remoteTokenAddress
+REF_395(RateLimiter.Config) -> newChain.outboundRateLimiterConfig
+REF_396(RateLimiter.Config) -> newChain.inboundRateLimiterConfig
+Emit ChainAdded(REF_393,REF_394,REF_395,REF_396)"];
+42->43;
+43[label="Node Type: EXPRESSION 43
+
+EXPRESSION:
+++ i_scope_0
+
+IRs:
+i_scope_0(uint256) = i_scope_0 (c)+ 1"];
+43->22;
+44[label="Node Type: EXPRESSION 44
+
+EXPRESSION:
+onlyOwner()
+
+IRs:
+MODIFIER_CALL, Ownable2Step.onlyOwner()()"];
+44->3;
+}

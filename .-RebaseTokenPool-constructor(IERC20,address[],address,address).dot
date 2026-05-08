@@ -1,0 +1,12 @@
+digraph{
+0[label="Node Type: ENTRY_POINT 0
+"];
+0->1;
+1[label="Node Type: EXPRESSION 1
+
+EXPRESSION:
+TokenPool(_token,LOCAL_TOKEN_DECIMALS_OR_PRECISION,_allowList,_rmnProxy,_router)
+
+IRs:
+INTERNAL_CALL, TokenPool.constructor(IERC20,uint8,address[],address,address)(_token,LOCAL_TOKEN_DECIMALS_OR_PRECISION,_allowList,_rmnProxy,_router)"];
+}

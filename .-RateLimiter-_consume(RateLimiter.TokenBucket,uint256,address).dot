@@ -1,0 +1,237 @@
+digraph{
+0[label="Node Type: ENTRY_POINT 0
+"];
+0->1;
+1[label="Node Type: IF 1
+
+EXPRESSION:
+! s_bucket.isEnabled || requestTokens == 0
+
+IRs:
+REF_3(bool) -> s_bucket.isEnabled
+TMP_14 = UnaryType.BANG REF_3 
+TMP_15(bool) = requestTokens == 0
+TMP_16(bool) = TMP_14 || TMP_15
+CONDITION TMP_16"];
+1->2[label="True"];
+1->3[label="False"];
+2[label="Node Type: RETURN 2
+"];
+3[label="Node Type: END_IF 3
+"];
+3->4;
+4[label="Node Type: NEW VARIABLE 4
+
+EXPRESSION:
+tokens = s_bucket.tokens
+
+IRs:
+REF_4(uint128) -> s_bucket.tokens
+tokens(uint256) := REF_4(uint128)"];
+4->5;
+5[label="Node Type: NEW VARIABLE 5
+
+EXPRESSION:
+capacity = s_bucket.capacity
+
+IRs:
+REF_5(uint128) -> s_bucket.capacity
+capacity(uint256) := REF_5(uint128)"];
+5->6;
+6[label="Node Type: NEW VARIABLE 6
+
+EXPRESSION:
+timeDiff = block.timestamp - s_bucket.lastUpdated
+
+IRs:
+REF_6(uint32) -> s_bucket.lastUpdated
+TMP_17(uint256) = block.timestamp (c)- REF_6
+timeDiff(uint256) := TMP_17(uint256)"];
+6->7;
+7[label="Node Type: IF 7
+
+EXPRESSION:
+timeDiff != 0
+
+IRs:
+TMP_18(bool) = timeDiff != 0
+CONDITION TMP_18"];
+7->8[label="True"];
+7->13[label="False"];
+8[label="Node Type: IF 8
+
+EXPRESSION:
+tokens > capacity
+
+IRs:
+TMP_19(bool) = tokens > capacity
+CONDITION TMP_19"];
+8->9[label="True"];
+8->10[label="False"];
+9[label="Node Type: EXPRESSION 9
+
+EXPRESSION:
+revert BucketOverfilled()()
+
+IRs:
+TMP_20(None) = SOLIDITY_CALL revert BucketOverfilled()()"];
+9->10;
+10[label="Node Type: END_IF 10
+"];
+10->11;
+11[label="Node Type: EXPRESSION 11
+
+EXPRESSION:
+tokens = _calculateRefill(capacity,tokens,timeDiff,s_bucket.rate)
+
+IRs:
+REF_7(uint128) -> s_bucket.rate
+TMP_21(uint256) = INTERNAL_CALL, RateLimiter._calculateRefill(uint256,uint256,uint256,uint256)(capacity,tokens,timeDiff,REF_7)
+tokens(uint256) := TMP_21(uint256)"];
+11->12;
+12[label="Node Type: EXPRESSION 12
+
+EXPRESSION:
+s_bucket.lastUpdated = uint32(block.timestamp)
+
+IRs:
+REF_8(uint32) -> s_bucket.lastUpdated
+TMP_22 = CONVERT block.timestamp to uint32
+REF_8(uint32) (->s_bucket) := TMP_22(uint32)"];
+12->13;
+13[label="Node Type: END_IF 13
+"];
+13->14;
+14[label="Node Type: IF 14
+
+EXPRESSION:
+capacity < requestTokens
+
+IRs:
+TMP_23(bool) = capacity < requestTokens
+CONDITION TMP_23"];
+14->15[label="True"];
+14->19[label="False"];
+15[label="Node Type: IF 15
+
+EXPRESSION:
+tokenAddress == address(0)
+
+IRs:
+TMP_24 = CONVERT 0 to address
+TMP_25(bool) = tokenAddress == TMP_24
+CONDITION TMP_25"];
+15->16[label="True"];
+15->17[label="False"];
+16[label="Node Type: EXPRESSION 16
+
+EXPRESSION:
+revert AggregateValueMaxCapacityExceeded(uint256,uint256)(capacity,requestTokens)
+
+IRs:
+TMP_26(None) = SOLIDITY_CALL revert AggregateValueMaxCapacityExceeded(uint256,uint256)(capacity,requestTokens)"];
+16->17;
+17[label="Node Type: END_IF 17
+"];
+17->18;
+18[label="Node Type: EXPRESSION 18
+
+EXPRESSION:
+revert TokenMaxCapacityExceeded(uint256,uint256,address)(capacity,requestTokens,tokenAddress)
+
+IRs:
+TMP_27(None) = SOLIDITY_CALL revert TokenMaxCapacityExceeded(uint256,uint256,address)(capacity,requestTokens,tokenAddress)"];
+18->19;
+19[label="Node Type: END_IF 19
+"];
+19->20;
+20[label="Node Type: IF 20
+
+EXPRESSION:
+tokens < requestTokens
+
+IRs:
+TMP_28(bool) = tokens < requestTokens
+CONDITION TMP_28"];
+20->21[label="True"];
+20->27[label="False"];
+21[label="Node Type: NEW VARIABLE 21
+
+EXPRESSION:
+rate = s_bucket.rate
+
+IRs:
+REF_9(uint128) -> s_bucket.rate
+rate(uint256) := REF_9(uint128)"];
+21->22;
+22[label="Node Type: NEW VARIABLE 22
+
+EXPRESSION:
+minWaitInSeconds = ((requestTokens - tokens) + (rate - 1)) / rate
+
+IRs:
+TMP_29(uint256) = requestTokens (c)- tokens
+TMP_30(uint256) = rate (c)- 1
+TMP_31(uint256) = TMP_29 (c)+ TMP_30
+TMP_32(uint256) = TMP_31 (c)/ rate
+minWaitInSeconds(uint256) := TMP_32(uint256)"];
+22->23;
+23[label="Node Type: IF 23
+
+EXPRESSION:
+tokenAddress == address(0)
+
+IRs:
+TMP_33 = CONVERT 0 to address
+TMP_34(bool) = tokenAddress == TMP_33
+CONDITION TMP_34"];
+23->24[label="True"];
+23->25[label="False"];
+24[label="Node Type: EXPRESSION 24
+
+EXPRESSION:
+revert AggregateValueRateLimitReached(uint256,uint256)(minWaitInSeconds,tokens)
+
+IRs:
+TMP_35(None) = SOLIDITY_CALL revert AggregateValueRateLimitReached(uint256,uint256)(minWaitInSeconds,tokens)"];
+24->25;
+25[label="Node Type: END_IF 25
+"];
+25->26;
+26[label="Node Type: EXPRESSION 26
+
+EXPRESSION:
+revert TokenRateLimitReached(uint256,uint256,address)(minWaitInSeconds,tokens,tokenAddress)
+
+IRs:
+TMP_36(None) = SOLIDITY_CALL revert TokenRateLimitReached(uint256,uint256,address)(minWaitInSeconds,tokens,tokenAddress)"];
+26->27;
+27[label="Node Type: END_IF 27
+"];
+27->28;
+28[label="Node Type: EXPRESSION 28
+
+EXPRESSION:
+tokens -= requestTokens
+
+IRs:
+tokens(uint256) = tokens (c)- requestTokens"];
+28->29;
+29[label="Node Type: EXPRESSION 29
+
+EXPRESSION:
+s_bucket.tokens = uint128(tokens)
+
+IRs:
+REF_10(uint128) -> s_bucket.tokens
+TMP_37 = CONVERT tokens to uint128
+REF_10(uint128) (->s_bucket) := TMP_37(uint128)"];
+29->30;
+30[label="Node Type: EXPRESSION 30
+
+EXPRESSION:
+TokensConsumed(requestTokens)
+
+IRs:
+Emit TokensConsumed(requestTokens)"];
+}

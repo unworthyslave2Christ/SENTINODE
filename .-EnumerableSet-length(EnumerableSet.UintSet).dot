@@ -1,0 +1,14 @@
+digraph{
+0[label="Node Type: ENTRY_POINT 0
+"];
+0->1;
+1[label="Node Type: RETURN 1
+
+EXPRESSION:
+_length(set._inner)
+
+IRs:
+REF_257(EnumerableSet.Set) -> set._inner
+TMP_480(uint256) = INTERNAL_CALL, EnumerableSet._length(EnumerableSet.Set)(REF_257)
+RETURN TMP_480"];
+}

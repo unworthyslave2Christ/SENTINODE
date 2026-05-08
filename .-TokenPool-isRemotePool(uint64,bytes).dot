@@ -1,0 +1,16 @@
+digraph{
+0[label="Node Type: ENTRY_POINT 0
+"];
+0->1;
+1[label="Node Type: RETURN 1
+
+EXPRESSION:
+s_remoteChainConfigs[remoteChainSelector].remotePools.contains(keccak256(bytes)(remotePoolAddress))
+
+IRs:
+REF_73(TokenPool.RemoteChainConfig) -> s_remoteChainConfigs[remoteChainSelector]
+REF_74(EnumerableSet.Bytes32Set) -> REF_73.remotePools
+TMP_176(bytes32) = SOLIDITY_CALL keccak256(bytes)(remotePoolAddress)
+TMP_177(bool) = LIBRARY_CALL, dest:EnumerableSet, function:EnumerableSet.contains(EnumerableSet.Bytes32Set,bytes32), arguments:['REF_74', 'TMP_176'] 
+RETURN TMP_177"];
+}

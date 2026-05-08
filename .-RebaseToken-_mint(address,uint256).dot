@@ -1,0 +1,36 @@
+digraph{
+0[label="Node Type: ENTRY_POINT 0
+"];
+0->1;
+1[label="Node Type: IF 1
+
+EXPRESSION:
+account == address(0)
+
+IRs:
+TMP_558 = CONVERT 0 to address
+TMP_559(bool) = account == TMP_558
+CONDITION TMP_559"];
+1->2[label="True"];
+1->3[label="False"];
+2[label="Node Type: EXPRESSION 2
+
+EXPRESSION:
+revert ERC20InvalidReceiver(address)(address(0))
+
+IRs:
+TMP_560 = CONVERT 0 to address
+TMP_561(None) = SOLIDITY_CALL revert ERC20InvalidReceiver(address)(TMP_560)"];
+2->3;
+3[label="Node Type: END_IF 3
+"];
+3->4;
+4[label="Node Type: EXPRESSION 4
+
+EXPRESSION:
+_update(address(0),account,value)
+
+IRs:
+TMP_562 = CONVERT 0 to address
+INTERNAL_CALL, ERC20._update(address,address,uint256)(TMP_562,account,value)"];
+}

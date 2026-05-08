@@ -1,0 +1,88 @@
+digraph{
+0[label="Node Type: ENTRY_POINT 0
+"];
+0->1;
+1[label="Node Type: IF 1
+
+EXPRESSION:
+config.isEnabled
+
+IRs:
+REF_32(bool) -> config.isEnabled
+CONDITION REF_32"];
+1->2[label="True"];
+1->8[label="False"];
+2[label="Node Type: IF 2
+
+EXPRESSION:
+config.rate >= config.capacity || config.rate == 0
+
+IRs:
+REF_33(uint128) -> config.rate
+REF_34(uint128) -> config.capacity
+TMP_51(bool) = REF_33 >= REF_34
+REF_35(uint128) -> config.rate
+TMP_52(bool) = REF_35 == 0
+TMP_53(bool) = TMP_51 || TMP_52
+CONDITION TMP_53"];
+2->3[label="True"];
+2->4[label="False"];
+3[label="Node Type: EXPRESSION 3
+
+EXPRESSION:
+revert InvalidRateLimitRate(RateLimiter.Config)(config)
+
+IRs:
+TMP_54(None) = SOLIDITY_CALL revert InvalidRateLimitRate(RateLimiter.Config)(config)"];
+3->4;
+4[label="Node Type: END_IF 4
+"];
+4->5;
+5[label="Node Type: IF 5
+
+EXPRESSION:
+mustBeDisabled
+
+IRs:
+CONDITION mustBeDisabled"];
+5->6[label="True"];
+5->7[label="False"];
+6[label="Node Type: EXPRESSION 6
+
+EXPRESSION:
+revert RateLimitMustBeDisabled()()
+
+IRs:
+TMP_55(None) = SOLIDITY_CALL revert RateLimitMustBeDisabled()()"];
+6->7;
+7[label="Node Type: END_IF 7
+"];
+7->11;
+8[label="Node Type: IF 8
+
+EXPRESSION:
+config.rate != 0 || config.capacity != 0
+
+IRs:
+REF_36(uint128) -> config.rate
+TMP_56(bool) = REF_36 != 0
+REF_37(uint128) -> config.capacity
+TMP_57(bool) = REF_37 != 0
+TMP_58(bool) = TMP_56 || TMP_57
+CONDITION TMP_58"];
+8->9[label="True"];
+8->10[label="False"];
+9[label="Node Type: EXPRESSION 9
+
+EXPRESSION:
+revert DisabledNonZeroRateLimit(RateLimiter.Config)(config)
+
+IRs:
+TMP_59(None) = SOLIDITY_CALL revert DisabledNonZeroRateLimit(RateLimiter.Config)(config)"];
+9->10;
+10[label="Node Type: END_IF 10
+"];
+10->11;
+11[label="Node Type: END_IF 11
+"];
+}

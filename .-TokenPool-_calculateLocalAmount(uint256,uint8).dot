@@ -1,0 +1,121 @@
+digraph{
+0[label="Node Type: ENTRY_POINT 0
+"];
+0->1;
+1[label="Node Type: IF 1
+
+EXPRESSION:
+remoteDecimals == i_tokenDecimals
+
+IRs:
+TMP_154(bool) = remoteDecimals == i_tokenDecimals
+CONDITION TMP_154"];
+1->2[label="True"];
+1->3[label="False"];
+2[label="Node Type: RETURN 2
+
+EXPRESSION:
+remoteAmount
+
+IRs:
+RETURN remoteAmount"];
+3[label="Node Type: END_IF 3
+"];
+3->4;
+4[label="Node Type: IF 4
+
+EXPRESSION:
+remoteDecimals > i_tokenDecimals
+
+IRs:
+TMP_155(bool) = remoteDecimals > i_tokenDecimals
+CONDITION TMP_155"];
+4->5[label="True"];
+4->10[label="False"];
+5[label="Node Type: NEW VARIABLE 5
+
+EXPRESSION:
+decimalsDiff = remoteDecimals - i_tokenDecimals
+
+IRs:
+TMP_156(uint8) = remoteDecimals (c)- i_tokenDecimals
+decimalsDiff(uint8) := TMP_156(uint8)"];
+5->6;
+6[label="Node Type: IF 6
+
+EXPRESSION:
+decimalsDiff > 77
+
+IRs:
+TMP_157(bool) = decimalsDiff > 77
+CONDITION TMP_157"];
+6->7[label="True"];
+6->8[label="False"];
+7[label="Node Type: EXPRESSION 7
+
+EXPRESSION:
+revert OverflowDetected(uint8,uint8,uint256)(remoteDecimals,i_tokenDecimals,remoteAmount)
+
+IRs:
+TMP_158(None) = SOLIDITY_CALL revert OverflowDetected(uint8,uint8,uint256)(remoteDecimals,i_tokenDecimals,remoteAmount)"];
+7->8;
+8[label="Node Type: END_IF 8
+"];
+8->9;
+9[label="Node Type: RETURN 9
+
+EXPRESSION:
+remoteAmount / (10 ** decimalsDiff)
+
+IRs:
+TMP_159(uint256) = 10 (c)** decimalsDiff
+TMP_160(uint256) = remoteAmount (c)/ TMP_159
+RETURN TMP_160"];
+10[label="Node Type: END_IF 10
+"];
+10->11;
+11[label="Node Type: NEW VARIABLE 11
+
+EXPRESSION:
+diffDecimals = i_tokenDecimals - remoteDecimals
+
+IRs:
+TMP_161(uint8) = i_tokenDecimals (c)- remoteDecimals
+diffDecimals(uint8) := TMP_161(uint8)"];
+11->12;
+12[label="Node Type: IF 12
+
+EXPRESSION:
+diffDecimals > 77 || remoteAmount > type()(uint256).max / (10 ** diffDecimals)
+
+IRs:
+TMP_162(bool) = diffDecimals > 77
+TMP_164(uint256) := 115792089237316195423570985008687907853269984665640564039457584007913129639935(uint256)
+TMP_165(uint256) = 10 (c)** diffDecimals
+TMP_166(uint256) = TMP_164 (c)/ TMP_165
+TMP_167(bool) = remoteAmount > TMP_166
+TMP_168(bool) = TMP_162 || TMP_167
+CONDITION TMP_168"];
+12->13[label="True"];
+12->14[label="False"];
+13[label="Node Type: EXPRESSION 13
+
+EXPRESSION:
+revert OverflowDetected(uint8,uint8,uint256)(remoteDecimals,i_tokenDecimals,remoteAmount)
+
+IRs:
+TMP_169(None) = SOLIDITY_CALL revert OverflowDetected(uint8,uint8,uint256)(remoteDecimals,i_tokenDecimals,remoteAmount)"];
+13->14;
+14[label="Node Type: END_IF 14
+"];
+14->15;
+15[label="Node Type: RETURN 15
+
+EXPRESSION:
+remoteAmount * (10 ** diffDecimals)
+
+IRs:
+TMP_170(uint256) = 10 (c)** diffDecimals
+TMP_171(uint256) = remoteAmount (c)* TMP_170
+RETURN TMP_171"];
+}

@@ -1,0 +1,38 @@
+digraph{
+0[label="Node Type: ENTRY_POINT 0
+"];
+0->1;
+1[label="Node Type: IF 1
+
+EXPRESSION:
+i_allowlistEnabled
+
+IRs:
+CONDITION i_allowlistEnabled"];
+1->2[label="True"];
+1->5[label="False"];
+2[label="Node Type: IF 2
+
+EXPRESSION:
+! s_allowlist.contains(sender)
+
+IRs:
+TMP_829(bool) = LIBRARY_CALL, dest:EnumerableSet, function:EnumerableSet.contains(EnumerableSet.AddressSet,address), arguments:['s_allowlist', 'sender'] 
+TMP_830 = UnaryType.BANG TMP_829 
+CONDITION TMP_830"];
+2->3[label="True"];
+2->4[label="False"];
+3[label="Node Type: EXPRESSION 3
+
+EXPRESSION:
+revert SenderNotAllowed(address)(sender)
+
+IRs:
+TMP_831(None) = SOLIDITY_CALL revert SenderNotAllowed(address)(sender)"];
+3->4;
+4[label="Node Type: END_IF 4
+"];
+4->5;
+5[label="Node Type: END_IF 5
+"];
+}

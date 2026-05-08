@@ -1,0 +1,15 @@
+digraph{
+0[label="Node Type: ENTRY_POINT 0
+"];
+0->1;
+1[label="Node Type: EXPRESSION 1
+
+EXPRESSION:
+s_remoteChainConfigs[remoteChainSelector].inboundRateLimiterConfig._consume(amount,address(i_token))
+
+IRs:
+REF_151(TokenPool.RemoteChainConfig) -> s_remoteChainConfigs[remoteChainSelector]
+REF_152(RateLimiter.TokenBucket) -> REF_151.inboundRateLimiterConfig
+TMP_233 = CONVERT i_token to address
+LIBRARY_CALL, dest:RateLimiter, function:RateLimiter._consume(RateLimiter.TokenBucket,uint256,address), arguments:['REF_152', 'amount', 'TMP_233'] "];
+}

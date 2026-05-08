@@ -1,0 +1,99 @@
+digraph{
+0[label="Node Type: ENTRY_POINT 0
+"];
+0->1;
+1[label="Node Type: IF 1
+
+EXPRESSION:
+msg.sender != s_rateLimitAdmin && msg.sender != owner()
+
+IRs:
+TMP_237(bool) = msg.sender != s_rateLimitAdmin
+TMP_238(address) = INTERNAL_CALL, Ownable2Step.owner()()
+TMP_239(bool) = msg.sender != TMP_238
+TMP_240(bool) = TMP_237 && TMP_239
+CONDITION TMP_240"];
+1->2[label="True"];
+1->3[label="False"];
+2[label="Node Type: EXPRESSION 2
+
+EXPRESSION:
+revert Unauthorized(address)(msg.sender)
+
+IRs:
+TMP_241(None) = SOLIDITY_CALL revert Unauthorized(address)(msg.sender)"];
+2->3;
+3[label="Node Type: END_IF 3
+"];
+3->4;
+4[label="Node Type: IF 4
+
+EXPRESSION:
+remoteChainSelectors.length != outboundConfigs.length || remoteChainSelectors.length != inboundConfigs.length
+
+IRs:
+REF_160 -> LENGTH remoteChainSelectors
+REF_161 -> LENGTH outboundConfigs
+TMP_242(bool) = REF_160 != REF_161
+REF_162 -> LENGTH remoteChainSelectors
+REF_163 -> LENGTH inboundConfigs
+TMP_243(bool) = REF_162 != REF_163
+TMP_244(bool) = TMP_242 || TMP_243
+CONDITION TMP_244"];
+4->5[label="True"];
+4->6[label="False"];
+5[label="Node Type: EXPRESSION 5
+
+EXPRESSION:
+revert MismatchedArrayLengths()()
+
+IRs:
+TMP_245(None) = SOLIDITY_CALL revert MismatchedArrayLengths()()"];
+5->6;
+6[label="Node Type: END_IF 6
+"];
+6->9;
+7[label="Node Type: BEGIN_LOOP 7
+"];
+7->10;
+8[label="Node Type: END_LOOP 8
+"];
+9[label="Node Type: NEW VARIABLE 9
+
+EXPRESSION:
+i = 0
+
+IRs:
+i(uint256) := 0(uint256)"];
+9->7;
+10[label="Node Type: IF_LOOP 10
+
+EXPRESSION:
+i < remoteChainSelectors.length
+
+IRs:
+REF_164 -> LENGTH remoteChainSelectors
+TMP_246(bool) = i < REF_164
+CONDITION TMP_246"];
+10->11[label="True"];
+10->8[label="False"];
+11[label="Node Type: EXPRESSION 11
+
+EXPRESSION:
+_setRateLimitConfig(remoteChainSelectors[i],outboundConfigs[i],inboundConfigs[i])
+
+IRs:
+REF_165(uint64) -> remoteChainSelectors[i]
+REF_166(RateLimiter.Config) -> outboundConfigs[i]
+REF_167(RateLimiter.Config) -> inboundConfigs[i]
+INTERNAL_CALL, TokenPool._setRateLimitConfig(uint64,RateLimiter.Config,RateLimiter.Config)(REF_165,REF_166,REF_167)"];
+11->12;
+12[label="Node Type: EXPRESSION 12
+
+EXPRESSION:
+++ i
+
+IRs:
+i(uint256) = i (c)+ 1"];
+12->10;
+}

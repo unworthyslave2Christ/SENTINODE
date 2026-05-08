@@ -1,0 +1,37 @@
+digraph{
+0[label="Node Type: ENTRY_POINT 0
+"];
+0->1;
+1[label="Node Type: NEW VARIABLE 1
+
+EXPRESSION:
+spender = _msgSender()
+
+IRs:
+TMP_386(address) = INTERNAL_CALL, Context._msgSender()()
+spender(address) := TMP_386(address)"];
+1->2;
+2[label="Node Type: EXPRESSION 2
+
+EXPRESSION:
+_spendAllowance(from,spender,value)
+
+IRs:
+INTERNAL_CALL, ERC20._spendAllowance(address,address,uint256)(from,spender,value)"];
+2->3;
+3[label="Node Type: EXPRESSION 3
+
+EXPRESSION:
+_transfer(from,to,value)
+
+IRs:
+INTERNAL_CALL, ERC20._transfer(address,address,uint256)(from,to,value)"];
+3->4;
+4[label="Node Type: RETURN 4
+
+EXPRESSION:
+true
+
+IRs:
+RETURN True"];
+}

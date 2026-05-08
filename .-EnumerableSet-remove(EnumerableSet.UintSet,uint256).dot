@@ -1,0 +1,15 @@
+digraph{
+0[label="Node Type: ENTRY_POINT 0
+"];
+0->1;
+1[label="Node Type: RETURN 1
+
+EXPRESSION:
+_remove(set._inner,bytes32(value))
+
+IRs:
+REF_255(EnumerableSet.Set) -> set._inner
+TMP_476 = CONVERT value to bytes32
+TMP_477(bool) = INTERNAL_CALL, EnumerableSet._remove(EnumerableSet.Set,bytes32)(REF_255,TMP_476)
+RETURN TMP_477"];
+}

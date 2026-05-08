@@ -1,0 +1,22 @@
+digraph{
+0[label="Node Type: ENTRY_POINT 0
+"];
+0->1;
+1[label="Node Type: RETURN 1
+
+EXPRESSION:
+interfaceId == Pool.CCIP_POOL_V1 || interfaceId == type()(IPoolV1).interfaceId || interfaceId == type()(IERC165).interfaceId
+
+IRs:
+REF_40(bytes4) -> Pool.CCIP_POOL_V1
+TMP_113(bool) = interfaceId == REF_40
+TMP_114(type(IPoolV1)) = SOLIDITY_CALL type()(IPoolV1)
+REF_41(bytes4) (->None) := 1787810189(bytes4)
+TMP_115(bool) = interfaceId == REF_41
+TMP_116(bool) = TMP_113 || TMP_115
+TMP_117(type(IERC165)) = SOLIDITY_CALL type()(IERC165)
+REF_42(bytes4) (->None) := 33540519(bytes4)
+TMP_118(bool) = interfaceId == REF_42
+TMP_119(bool) = TMP_116 || TMP_118
+RETURN TMP_119"];
+}

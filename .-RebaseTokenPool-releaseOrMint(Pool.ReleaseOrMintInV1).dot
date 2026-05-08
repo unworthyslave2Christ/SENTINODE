@@ -1,0 +1,44 @@
+digraph{
+0[label="Node Type: ENTRY_POINT 0
+"];
+0->1;
+1[label="Node Type: EXPRESSION 1
+
+EXPRESSION:
+_validateReleaseOrMint(releaseOrMintIn)
+
+IRs:
+INTERNAL_CALL, TokenPool._validateReleaseOrMint(Pool.ReleaseOrMintInV1)(releaseOrMintIn)"];
+1->2;
+2[label="Node Type: NEW VARIABLE 2
+
+EXPRESSION:
+userInterestRate = abi.decode(releaseOrMintIn.sourcePoolData,(uint256))
+
+IRs:
+REF_447(bytes) -> releaseOrMintIn.sourcePoolData
+TMP_878(uint256) = SOLIDITY_CALL abi.decode()(REF_447,uint256)
+userInterestRate(uint256) := TMP_878(uint256)"];
+2->3;
+3[label="Node Type: EXPRESSION 3
+
+EXPRESSION:
+IRebaseToken(address(i_token)).mint(releaseOrMintIn.receiver,releaseOrMintIn.amount)
+
+IRs:
+TMP_879 = CONVERT i_token to address
+TMP_880 = CONVERT TMP_879 to IRebaseToken
+REF_449(address) -> releaseOrMintIn.receiver
+REF_450(uint256) -> releaseOrMintIn.amount
+HIGH_LEVEL_CALL, dest:TMP_880(IRebaseToken), function:mint, arguments:['REF_449', 'REF_450']  "];
+3->4;
+4[label="Node Type: RETURN 4
+
+EXPRESSION:
+Pool.ReleaseOrMintOutV1({destinationAmount:releaseOrMintIn.amount})
+
+IRs:
+REF_452(uint256) -> releaseOrMintIn.amount
+TMP_882(Pool.ReleaseOrMintOutV1) = new ReleaseOrMintOutV1(REF_452)
+RETURN TMP_882"];
+}
