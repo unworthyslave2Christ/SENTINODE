@@ -76,20 +76,24 @@ function extractLayerOneTrace(cfgPath) {
             output.modifiers_in_function.push(modObj);
         }
 
-        // --- 3. REVERTS ---
+        // --- 3. REVERTS (With De-duplication) ---
         let revMatch;
+        let seenRevertsInStatement = new Set(); // Local set for this node
         while ((revMatch = revertRegex.exec(labelBody)) !== null) {
             const [__, revName, inputs, names] = revMatch;
-            const revObj = {};
-            // Fix for empty split: only map if string is not empty
-            const safeSplit = (str) => str && str.trim() ? str.split(',').map(s => s.trim()) : [];
+            const trimmedName = revName.trim();
             
-            revObj[revName.trim()] = {
-                "input_signatures": safeSplit(inputs),
-                "input_names": safeSplit(names),
-                "statement_found_in": statementKey // Added property
-            };
-            output.reverts_in_function.push(revObj);
+            if (!seenRevertsInStatement.has(trimmedName)) {
+                const safeSplit = (str) => str && str.trim() ? str.split(',').map(s => s.trim()) : [];
+                const revObj = {};
+                revObj[trimmedName] = {
+                    "input_signatures": safeSplit(inputs),
+                    "input_names": safeSplit(names),
+                    "statement_found_in": statementKey
+                };
+                output.reverts_in_function.push(revObj);
+                seenRevertsInStatement.add(trimmedName);
+            }
         }
 
         // --- EVENT EXTRACTION (NEW STRATEGY) ---
@@ -133,5 +137,5 @@ function extractLayerOneTrace(cfgPath) {
     return output;
 }
 
-const schema = extractLayerOneTrace('./.-Vault-redeem(uint256).dot');
+const schema = extractLayerOneTrace('./.-TokenPool-owner().dot');
 console.log(JSON.stringify(schema, null, 2));
