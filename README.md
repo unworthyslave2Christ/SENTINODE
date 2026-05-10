@@ -25,4 +25,4 @@ We are currently bridging the Logic Extraction Engine.
 4. **Milestone 4**: Invariant Stress-Testing (Echidna Visualizer)
 
 ## 📄 License
-MIT License
+All rights reserved.
