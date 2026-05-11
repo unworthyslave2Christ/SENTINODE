@@ -3,8 +3,6 @@ const fs = require('fs');
 const path = require('path');
 
 
-
-
 function extractLayerOneTrace(cfgPath) {
     if (!fs.existsSync(cfgPath)) return { error: "File not found" };
     const dotContent = fs.readFileSync(cfgPath, 'utf8');
@@ -153,6 +151,7 @@ function processHolisticSchema(rootDir) {
         console.log(`Creating directory: ${generatedDir}`);
         fs.mkdirSync(generatedDir, { recursive: true });
     }
+    
 
     // Move all .dot files from root to generated_cfgs
     console.log(`Scanning root: ${absoluteRoot} for .dot files...`);
@@ -174,20 +173,97 @@ function processHolisticSchema(rootDir) {
     console.log(`Successfully moved ${movedCount} files to /generated_cfgs.`);
 
     // 2. Holistic Logic Extraction
-    const holisticObject = {};
+    const SENTINODE_MAP = {};
     const cfgFiles = fs.readdirSync(generatedDir);
 
+    const flattenedPath = path.resolve(rootDir, 'crytic-export/flattening/export.sol');
+    if (!fs.existsSync(flattenedPath)) {
+        console.error("Critical: Flattened source 'export.sol' not found.");
+        return {};
+    }
+    const flattenedSource = fs.readFileSync(flattenedPath, 'utf8');
+    
     cfgFiles.forEach(filename => {
         if (filename.endsWith('.dot')) {
             const cfgPath = path.join(generatedDir, filename);
-            
-            const extractedTrace = extractLayerOneTrace(cfgPath)
+            const output = extractLayerOneTrace(cfgPath);
 
-            holisticObject[filename] = extractedTrace
+            const nameMatch = filename.match(/\.-([^-]+)-([^(]+)\(([^)]*)\)/);
+            
+            if (nameMatch) {
+                const contractName = nameMatch[1];
+                const functionName = nameMatch[2];
+                const rawFingerprint = nameMatch[3];
+                // Normalize expected types: ["bytes32"]
+                const expectedTypes = rawFingerprint ? rawFingerprint.split(',').map(t => t.trim()).filter(t => t !== "") : [];
+
+                const contractRegex = new RegExp(`contract\\s+${contractName}[\\s\\S]*?(?=contract|$)`, 'g');
+                const contractBlock = contractRegex.exec(flattenedSource)?.[0];
+
+                if (contractBlock) {
+                    const funcHeaderRegex = new RegExp(`function\\s+${functionName}\\s*\\(([^)]*)\\)[^{]*{`, 'g');
+                    
+                    let headerMatch;
+                    while ((headerMatch = funcHeaderRegex.exec(contractBlock)) !== null) {
+                        const rawParams = headerMatch[1];
+                        const paramEntries = rawParams.split(',').map(p => p.trim()).filter(p => p !== "");
+                        
+                        // FIX: Get clean types for comparison. e.g., "bytes32 role" -> "bytes32"
+                        const foundTypes = paramEntries.map(p => p.split(/\s+/)[0]);
+
+                        // Compare flat arrays
+                        if (JSON.stringify(foundTypes) === JSON.stringify(expectedTypes)) {
+                            
+                            // Brace counting for full body
+                            let openBraces = 1;
+                            let bodyStart = headerMatch.index + headerMatch.length;
+                            let cursor = bodyStart;
+                            while (openBraces > 0 && cursor < contractBlock.length) {
+                                if (contractBlock[cursor] === '{') openBraces++;
+                                if (contractBlock[cursor] === '}') openBraces--;
+                                cursor++;
+                            }
+
+                            const fullSource = contractBlock.substring(headerMatch.index, cursor);
+                            output.original_solidity_code = fullSource.trim();
+
+                            // POPULATE INPUTS: { "role": "bytes32" }
+                            output.inputs_into_function = []; // Ensure it's a list of objects
+                            paramEntries.forEach(entry => {
+                                const parts = entry.split(/\s+/);
+                                const pName = parts.pop();
+                                const pType = parts.join(' ');
+                                let inputObj = {};
+                                inputObj[pName] = pType;
+                                output.inputs_into_function.push(inputObj);
+                            });
+
+                            // Flags from the header
+                            const headerOnly = fullSource.split('{')[0];
+                            output.is_a_view_function = /\bview\b/.test(headerOnly);
+                            output.is_a_pure_function = /\bpure\b/.test(headerOnly);
+                            output.is_payable = /\bpayable\b/.test(headerOnly);
+                            output.neither_pure_nor_view = !(output.is_a_view_function || output.is_a_pure_function);
+                            
+                            // NEW FIELDS: Virtual and Override
+                            output.is_virtual = /\bvirtual\b/.test(headerOnly);
+                            output.is_override = /\boverride\b/.test(headerOnly);
+
+                            const visMatch = headerOnly.match(/\b(public|external|internal|private)\b/);
+                            output.visibility = visMatch ? visMatch[0] : "";
+
+                            break; 
+                        }
+                    }
+                }
+            }
+            SENTINODE_MAP[filename] = output;
         }
     });
 
-    return holisticObject;
+
+
+    return SENTINODE_MAP;
 }
 
 
