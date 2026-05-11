@@ -10,8 +10,9 @@ function extractLayerOneTrace(cfgPath) {
     // REGEX DEFINITIONS
     const nodeRegex = /(\d+)\[label="Node Type: ([A-Z_]+)\s+(\d+)([\s\S]*?)"\];/g;
     const internalCallRegex = /INTERNAL_CALL,\s*([^(\s,]+(?:\([^)]*\))?)/g;
-    const modifierRegex = /MODIFIER_CALL,\s*([^(\s,]+(?:\([^)]*\))?)\(TMP/g;
-    
+    // Captures from MODIFIER_CALL up to the first (TMP or the final empty ()
+    const modifierRegex = /MODIFIER_CALL,\s*([^)]+(?:\([^)]*\))?)\(/g;
+
     // Pattern 2: REVERT - Captures Name, Signatures, and Names
     const revertRegex = /revert\s+([^(]+)\(([^)]*)\)\(([^)]*)\)/g;
     
@@ -59,20 +60,24 @@ function extractLayerOneTrace(cfgPath) {
         while ((callMatch = internalCallRegex.exec(labelBody)) !== null) {
             const sig = callMatch[1];
             sigs.push(sig);
-            files.push(`${sig.replace(/\./g, '_')}.dot`);
+            files.push(`${sig.replace(/\./g, '-')}.dot`);
         }
         if (sigs.length > 0) output.contains_internal_calls_overall = true;
 
         // --- 2. MODIFIERS ---
         let modMatch;
         while ((modMatch = modifierRegex.exec(labelBody)) !== null) {
-            const fullModName = modMatch[1].trim();
+            let fullModName = modMatch[1].trim(); // e.g. "Ownable.onlyOwner()"
+            
+            // Clean up empty parens if they exist at the end for the key
+            const cleanKey = fullModName.replace(/\(\)$/, ""); 
             const parts = fullModName.split('.');
+            
             const modObj = {};
             modObj[fullModName] = [
-                parts[0], 
-                parts[1] || parts[0],
-                statementKey // Added as 3rd item in list
+                parts[0],              // Contract Name: "Ownable"
+                parts[1] || parts[0],  // Pure Signature: "onlyOwner()"
+                statementKey           // Anchored Statement
             ];
             output.modifiers_in_function.push(modObj);
         }
@@ -284,13 +289,12 @@ function processHolisticSchema(rootDir) {
 
 
 
-
 // EXECUTION 
 const SENTINODE_MAP = processHolisticSchema('./');
 console.log(`Total Holistic Object Keys: ${Object.keys(SENTINODE_MAP).length}`);
 
 
-const targetFile = '.-AccessControl-_checkRole(bytes32).dot';
+const targetFile = '.-RebaseToken-mint(address,uint256).dot';
 // To print a specific file's full logic data:
 console.log(`--- DEEP TRACE FOR: ${targetFile} ---`);
 console.log(JSON.stringify(SENTINODE_MAP[targetFile], null, 2));
