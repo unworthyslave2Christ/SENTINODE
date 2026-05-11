@@ -194,41 +194,54 @@ function processHolisticSchema(rootDir) {
                 const contractName = nameMatch[1];
                 const functionName = nameMatch[2];
                 const rawFingerprint = nameMatch[3];
-                // Normalize expected types: ["bytes32"]
                 const expectedTypes = rawFingerprint ? rawFingerprint.split(',').map(t => t.trim()).filter(t => t !== "") : [];
 
-                const contractRegex = new RegExp(`contract\\s+${contractName}[\\s\\S]*?(?=contract|$)`, 'g');
-                const contractBlock = contractRegex.exec(flattenedSource)?.[0];
+                // 1. Isolate the specific Contract block (Stop at next 'contract' or 'interface' or 'library')
+                const contractRegex = new RegExp(`contract\\s+${contractName}[\\s\\S]*?(?=\\ncontract|\\ninterface|\\nlibrary|$)`, 'g');
+                const contractMatch = contractRegex.exec(flattenedSource);
+                const contractBlock = contractMatch ? contractMatch[0] : null;
 
                 if (contractBlock) {
+                    // 2. Locate Function Header
                     const funcHeaderRegex = new RegExp(`function\\s+${functionName}\\s*\\(([^)]*)\\)[^{]*{`, 'g');
                     
                     let headerMatch;
                     while ((headerMatch = funcHeaderRegex.exec(contractBlock)) !== null) {
                         const rawParams = headerMatch[1];
                         const paramEntries = rawParams.split(',').map(p => p.trim()).filter(p => p !== "");
-                        
-                        // FIX: Get clean types for comparison. e.g., "bytes32 role" -> "bytes32"
-                        const foundTypes = paramEntries.map(p => p.split(/\s+/)[0]);
+                        const foundTypes = paramEntries.map(p => p.split(/\s+/)[0]); // Get only the first word (the type)
 
-                        // Compare flat arrays
+                        // 3. Exact Type Match for Overloads
                         if (JSON.stringify(foundTypes) === JSON.stringify(expectedTypes)) {
                             
-                            // Brace counting for full body
-                            let openBraces = 1;
-                            let bodyStart = headerMatch.index + headerMatch.length;
-                            let cursor = bodyStart;
-                            while (openBraces > 0 && cursor < contractBlock.length) {
-                                if (contractBlock[cursor] === '{') openBraces++;
-                                if (contractBlock[cursor] === '}') openBraces--;
+                            // 4. PRECISE BRACE COUNTING
+                            let openBraces = 0;
+                            let cursor = headerMatch.index;
+                            let bodyFound = false;
+                            let bodyEnd = cursor;
+
+                            // Start scanning from the headerMatch index
+                            while (cursor < contractBlock.length) {
+                                if (contractBlock[cursor] === '{') {
+                                    openBraces++;
+                                    bodyFound = true;
+                                }
+                                if (contractBlock[cursor] === '}') {
+                                    openBraces--;
+                                }
+                                // Once we've opened at least one brace and returned to 0, the function ends
+                                if (bodyFound && openBraces === 0) {
+                                    bodyEnd = cursor + 1;
+                                    break;
+                                }
                                 cursor++;
                             }
 
-                            const fullSource = contractBlock.substring(headerMatch.index, cursor);
+                            const fullSource = contractBlock.substring(headerMatch.index, bodyEnd);
                             output.original_solidity_code = fullSource.trim();
 
-                            // POPULATE INPUTS: { "role": "bytes32" }
-                            output.inputs_into_function = []; // Ensure it's a list of objects
+                            // 5. Populate Metadata
+                            output.inputs_into_function = [];
                             paramEntries.forEach(entry => {
                                 const parts = entry.split(/\s+/);
                                 const pName = parts.pop();
@@ -238,21 +251,23 @@ function processHolisticSchema(rootDir) {
                                 output.inputs_into_function.push(inputObj);
                             });
 
-                            // Flags from the header
                             const headerOnly = fullSource.split('{')[0];
                             output.is_a_view_function = /\bview\b/.test(headerOnly);
                             output.is_a_pure_function = /\bpure\b/.test(headerOnly);
                             output.is_payable = /\bpayable\b/.test(headerOnly);
-                            output.neither_pure_nor_view = !(output.is_a_view_function || output.is_a_pure_function);
-                            
-                            // NEW FIELDS: Virtual and Override
                             output.is_virtual = /\bvirtual\b/.test(headerOnly);
                             output.is_override = /\boverride\b/.test(headerOnly);
+                            output.neither_pure_nor_view = !(output.is_a_view_function || output.is_a_pure_function);
 
                             const visMatch = headerOnly.match(/\b(public|external|internal|private)\b/);
                             output.visibility = visMatch ? visMatch[0] : "";
 
-                            break; 
+                            const returnsMatch = headerOnly.match(/returns\s*\(([^)]*)\)/);
+                            if (returnsMatch) {
+                                output.returns_from_function = returnsMatch[1].split(',').map(r => r.trim());
+                            }
+
+                            break; // Stop searching once exact overload is matched
                         }
                     }
                 }
@@ -260,6 +275,7 @@ function processHolisticSchema(rootDir) {
             SENTINODE_MAP[filename] = output;
         }
     });
+
 
 
 
