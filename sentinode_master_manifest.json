@@ -1,0 +1,2850 @@
+{
+  "RebaseToken": {
+    "contract_name": "RebaseToken",
+    "inheritance_chain": [
+      "AccessControl",
+      "ERC165",
+      "IERC165",
+      "IAccessControl",
+      "Ownable",
+      "ERC20",
+      "IERC20Errors",
+      "IERC20Metadata",
+      "IERC20",
+      "Context"
+    ],
+    "contract_variables_raw": [
+      "DEFAULT_ADMIN_ROLE",
+      "PRECISION_FACTOR",
+      "MINT_AND_BURN_ROLE",
+      "s_interestRate",
+      "s_userInterestRate",
+      "s_userLastUpdatedTimestamp"
+    ],
+    "storage_slot_layout": [
+      {
+        "name": "_balances",
+        "type": "mapping(address => uint256)",
+        "slot": 0,
+        "offset": 0,
+        "state_type": "Storage",
+        "inherited_from": "ERC20"
+      },
+      {
+        "name": "_allowances",
+        "type": "mapping(address => mapping(address => uint256))",
+        "slot": 1,
+        "offset": 0,
+        "state_type": "Storage",
+        "inherited_from": "ERC20"
+      },
+      {
+        "name": "_totalSupply",
+        "type": "uint256",
+        "slot": 2,
+        "offset": 0,
+        "state_type": "Storage",
+        "inherited_from": "ERC20"
+      },
+      {
+        "name": "_name",
+        "type": "string",
+        "slot": 3,
+        "offset": 0,
+        "state_type": "Storage",
+        "inherited_from": "ERC20"
+      },
+      {
+        "name": "_symbol",
+        "type": "string",
+        "slot": 4,
+        "offset": 0,
+        "state_type": "Storage",
+        "inherited_from": "ERC20"
+      },
+      {
+        "name": "_owner",
+        "type": "address",
+        "slot": 5,
+        "offset": 0,
+        "state_type": "Storage",
+        "inherited_from": "Ownable"
+      },
+      {
+        "name": "_roles",
+        "type": "mapping(bytes32 => AccessControl.RoleData)",
+        "slot": 6,
+        "offset": 0,
+        "state_type": "Storage",
+        "inherited_from": "AccessControl"
+      },
+      {
+        "name": "s_interestRate",
+        "type": "uint256",
+        "slot": 7,
+        "offset": 0,
+        "state_type": "Storage",
+        "inherited_from": "Local"
+      },
+      {
+        "name": "s_userInterestRate",
+        "type": "mapping(address => uint256)",
+        "slot": 8,
+        "offset": 0,
+        "state_type": "Storage",
+        "inherited_from": "Local"
+      },
+      {
+        "name": "s_userLastUpdatedTimestamp",
+        "type": "mapping(address => uint256)",
+        "slot": 9,
+        "offset": 0,
+        "state_type": "Storage",
+        "inherited_from": "Local"
+      }
+    ],
+    "functions": [
+      {
+        "name": "supportsInterface(bytes4)",
+        "visibility": "public",
+        "is_state_changing_entry_point": false,
+        "modifiers": [],
+        "storage_reads": [],
+        "storage_writes": [],
+        "internal_calls": [
+          "TMP_108(type(IAccessControl)) = SOLIDITY_CALL type()(IAccessControl)",
+          "TMP_110(bool) = INTERNAL_CALL, ERC165.supportsInterface(bytes4)(interfaceId)"
+        ],
+        "external_calls": [],
+        "cyclomatic_complexity": 1,
+        "require_printer_data": [],
+        "msg_sender_auth_checks": [],
+        "vars_and_auth_matrix": {
+          "state_variables_written": [],
+          "has_auth_guards": false
+        },
+        "echidna_fuzzing_vectors": {
+          "impacts_functions": [],
+          "is_impacted_by_functions": [],
+          "constants_discovered": [
+            {
+              "value": {
+                "value": "2036718347",
+                "type": "bytes4"
+              }
+            },
+            {
+              "value": {
+                "value": "33540519",
+                "type": "bytes4"
+              }
+            }
+          ],
+          "binary_constants": {}
+        }
+      },
+      {
+        "name": "hasRole(bytes32,address)",
+        "visibility": "public",
+        "is_state_changing_entry_point": false,
+        "modifiers": [],
+        "storage_reads": [
+          "_roles"
+        ],
+        "storage_writes": [],
+        "internal_calls": [],
+        "external_calls": [],
+        "cyclomatic_complexity": 1,
+        "require_printer_data": [],
+        "msg_sender_auth_checks": [],
+        "vars_and_auth_matrix": {
+          "state_variables_written": [],
+          "has_auth_guards": false
+        },
+        "echidna_fuzzing_vectors": {
+          "impacts_functions": [],
+          "is_impacted_by_functions": [
+            "revokeRole(bytes32,address)",
+            "renounceRole(bytes32,address)",
+            "grantRole(bytes32,address)",
+            "grantMintAndBurnRole(address)"
+          ],
+          "constants_discovered": [
+            {
+              "value": {
+                "value": "hasRole",
+                "type": "string"
+              }
+            }
+          ],
+          "binary_constants": {}
+        }
+      },
+      {
+        "name": "_checkRole(bytes32)",
+        "visibility": "internal",
+        "is_state_changing_entry_point": false,
+        "modifiers": [],
+        "storage_reads": [],
+        "storage_writes": [],
+        "internal_calls": [
+          "INTERNAL_CALL, AccessControl._checkRole(bytes32,address)(role,TMP_112)",
+          "TMP_112(address) = INTERNAL_CALL, Context._msgSender()()"
+        ],
+        "external_calls": [],
+        "cyclomatic_complexity": 1,
+        "require_printer_data": [],
+        "msg_sender_auth_checks": [],
+        "vars_and_auth_matrix": {
+          "state_variables_written": [],
+          "has_auth_guards": false
+        },
+        "echidna_fuzzing_vectors": {
+          "impacts_functions": [],
+          "is_impacted_by_functions": [],
+          "constants_discovered": [
+            {
+              "value": {
+                "value": "hasRole",
+                "type": "string"
+              }
+            }
+          ],
+          "binary_constants": {}
+        }
+      },
+      {
+        "name": "_checkRole(bytes32,address)",
+        "visibility": "internal",
+        "is_state_changing_entry_point": false,
+        "modifiers": [],
+        "storage_reads": [],
+        "storage_writes": [],
+        "internal_calls": [
+          "TMP_114(bool) = INTERNAL_CALL, AccessControl.hasRole(bytes32,address)(role,account)",
+          "TMP_116(None) = SOLIDITY_CALL revert AccessControlUnauthorizedAccount(address,bytes32)(account,role)"
+        ],
+        "external_calls": [],
+        "cyclomatic_complexity": 2,
+        "require_printer_data": [],
+        "msg_sender_auth_checks": [],
+        "vars_and_auth_matrix": {
+          "state_variables_written": [],
+          "has_auth_guards": false
+        },
+        "echidna_fuzzing_vectors": {
+          "impacts_functions": [],
+          "is_impacted_by_functions": [],
+          "constants_discovered": [
+            {
+              "value": {
+                "value": "hasRole",
+                "type": "string"
+              }
+            }
+          ],
+          "binary_constants": {}
+        }
+      },
+      {
+        "name": "getRoleAdmin(bytes32)",
+        "visibility": "public",
+        "is_state_changing_entry_point": false,
+        "modifiers": [],
+        "storage_reads": [
+          "_roles"
+        ],
+        "storage_writes": [],
+        "internal_calls": [],
+        "external_calls": [],
+        "cyclomatic_complexity": 1,
+        "require_printer_data": [],
+        "msg_sender_auth_checks": [],
+        "vars_and_auth_matrix": {
+          "state_variables_written": [],
+          "has_auth_guards": false
+        },
+        "echidna_fuzzing_vectors": {
+          "impacts_functions": [],
+          "is_impacted_by_functions": [
+            "revokeRole(bytes32,address)",
+            "renounceRole(bytes32,address)",
+            "grantRole(bytes32,address)",
+            "grantMintAndBurnRole(address)"
+          ],
+          "constants_discovered": [
+            {
+              "value": {
+                "value": "adminRole",
+                "type": "string"
+              }
+            }
+          ],
+          "binary_constants": {}
+        }
+      },
+      {
+        "name": "grantRole(bytes32,address)",
+        "visibility": "public",
+        "is_state_changing_entry_point": true,
+        "modifiers": [
+          "onlyRole"
+        ],
+        "storage_reads": [],
+        "storage_writes": [],
+        "internal_calls": [
+          "MODIFIER_CALL, AccessControl.onlyRole(bytes32)(TMP_118)",
+          "TMP_117(bool) = INTERNAL_CALL, AccessControl._grantRole(bytes32,address)(role,account)",
+          "TMP_118(bytes32) = INTERNAL_CALL, AccessControl.getRoleAdmin(bytes32)(role)"
+        ],
+        "external_calls": [],
+        "cyclomatic_complexity": 1,
+        "require_printer_data": [],
+        "msg_sender_auth_checks": [],
+        "vars_and_auth_matrix": {
+          "state_variables_written": [
+            "_roles"
+          ],
+          "has_auth_guards": false
+        },
+        "echidna_fuzzing_vectors": {
+          "impacts_functions": [],
+          "is_impacted_by_functions": [],
+          "constants_discovered": [
+            {
+              "value": {
+                "value": "True",
+                "type": "bool"
+              }
+            },
+            {
+              "value": {
+                "value": "hasRole",
+                "type": "string"
+              }
+            },
+            {
+              "value": {
+                "value": "False",
+                "type": "bool"
+              }
+            },
+            {
+              "value": {
+                "value": "adminRole",
+                "type": "string"
+              }
+            }
+          ],
+          "binary_constants": {}
+        }
+      },
+      {
+        "name": "revokeRole(bytes32,address)",
+        "visibility": "public",
+        "is_state_changing_entry_point": true,
+        "modifiers": [
+          "onlyRole"
+        ],
+        "storage_reads": [],
+        "storage_writes": [],
+        "internal_calls": [
+          "MODIFIER_CALL, AccessControl.onlyRole(bytes32)(TMP_121)",
+          "TMP_120(bool) = INTERNAL_CALL, AccessControl._revokeRole(bytes32,address)(role,account)",
+          "TMP_121(bytes32) = INTERNAL_CALL, AccessControl.getRoleAdmin(bytes32)(role)"
+        ],
+        "external_calls": [],
+        "cyclomatic_complexity": 1,
+        "require_printer_data": [],
+        "msg_sender_auth_checks": [],
+        "vars_and_auth_matrix": {
+          "state_variables_written": [
+            "_roles"
+          ],
+          "has_auth_guards": false
+        },
+        "echidna_fuzzing_vectors": {
+          "impacts_functions": [],
+          "is_impacted_by_functions": [],
+          "constants_discovered": [
+            {
+              "value": {
+                "value": "False",
+                "type": "bool"
+              }
+            },
+            {
+              "value": {
+                "value": "hasRole",
+                "type": "string"
+              }
+            },
+            {
+              "value": {
+                "value": "True",
+                "type": "bool"
+              }
+            },
+            {
+              "value": {
+                "value": "adminRole",
+                "type": "string"
+              }
+            }
+          ],
+          "binary_constants": {}
+        }
+      },
+      {
+        "name": "renounceRole(bytes32,address)",
+        "visibility": "public",
+        "is_state_changing_entry_point": true,
+        "modifiers": [],
+        "storage_reads": [],
+        "storage_writes": [],
+        "internal_calls": [
+          "TMP_123(address) = INTERNAL_CALL, Context._msgSender()()",
+          "TMP_125(None) = SOLIDITY_CALL revert AccessControlBadConfirmation()()",
+          "TMP_126(bool) = INTERNAL_CALL, AccessControl._revokeRole(bytes32,address)(role,callerConfirmation)"
+        ],
+        "external_calls": [],
+        "cyclomatic_complexity": 2,
+        "require_printer_data": [],
+        "msg_sender_auth_checks": [],
+        "vars_and_auth_matrix": {
+          "state_variables_written": [
+            "_roles"
+          ],
+          "has_auth_guards": false
+        },
+        "echidna_fuzzing_vectors": {
+          "impacts_functions": [],
+          "is_impacted_by_functions": [],
+          "constants_discovered": [
+            {
+              "value": {
+                "value": "False",
+                "type": "bool"
+              }
+            },
+            {
+              "value": {
+                "value": "hasRole",
+                "type": "string"
+              }
+            },
+            {
+              "value": {
+                "value": "True",
+                "type": "bool"
+              }
+            }
+          ],
+          "binary_constants": {}
+        }
+      },
+      {
+        "name": "_setRoleAdmin(bytes32,bytes32)",
+        "visibility": "internal",
+        "is_state_changing_entry_point": false,
+        "modifiers": [],
+        "storage_reads": [
+          "_roles"
+        ],
+        "storage_writes": [
+          "_roles"
+        ],
+        "internal_calls": [
+          "TMP_127(bytes32) = INTERNAL_CALL, AccessControl.getRoleAdmin(bytes32)(role)"
+        ],
+        "external_calls": [],
+        "cyclomatic_complexity": 1,
+        "require_printer_data": [],
+        "msg_sender_auth_checks": [],
+        "vars_and_auth_matrix": {
+          "state_variables_written": [
+            "_roles"
+          ],
+          "has_auth_guards": false
+        },
+        "echidna_fuzzing_vectors": {
+          "impacts_functions": [
+            "grantRole(bytes32,address)",
+            "renounceRole(bytes32,address)",
+            "hasRole(bytes32,address)",
+            "grantMintAndBurnRole(address)",
+            "revokeRole(bytes32,address)",
+            "burn(address,uint256)",
+            "getRoleAdmin(bytes32)",
+            "mint(address,uint256)"
+          ],
+          "is_impacted_by_functions": [
+            "revokeRole(bytes32,address)",
+            "renounceRole(bytes32,address)",
+            "grantRole(bytes32,address)",
+            "grantMintAndBurnRole(address)"
+          ],
+          "constants_discovered": [
+            {
+              "value": {
+                "value": "adminRole",
+                "type": "string"
+              }
+            }
+          ],
+          "binary_constants": {}
+        }
+      },
+      {
+        "name": "_grantRole(bytes32,address)",
+        "visibility": "internal",
+        "is_state_changing_entry_point": false,
+        "modifiers": [],
+        "storage_reads": [
+          "_roles"
+        ],
+        "storage_writes": [
+          "_roles"
+        ],
+        "internal_calls": [
+          "TMP_129(bool) = INTERNAL_CALL, AccessControl.hasRole(bytes32,address)(role,account)",
+          "TMP_131(address) = INTERNAL_CALL, Context._msgSender()()"
+        ],
+        "external_calls": [],
+        "cyclomatic_complexity": 1,
+        "require_printer_data": [],
+        "msg_sender_auth_checks": [],
+        "vars_and_auth_matrix": {
+          "state_variables_written": [
+            "_roles"
+          ],
+          "has_auth_guards": false
+        },
+        "echidna_fuzzing_vectors": {
+          "impacts_functions": [
+            "grantRole(bytes32,address)",
+            "renounceRole(bytes32,address)",
+            "hasRole(bytes32,address)",
+            "grantMintAndBurnRole(address)",
+            "revokeRole(bytes32,address)",
+            "burn(address,uint256)",
+            "getRoleAdmin(bytes32)",
+            "mint(address,uint256)"
+          ],
+          "is_impacted_by_functions": [
+            "revokeRole(bytes32,address)",
+            "renounceRole(bytes32,address)",
+            "grantRole(bytes32,address)",
+            "grantMintAndBurnRole(address)"
+          ],
+          "constants_discovered": [
+            {
+              "value": {
+                "value": "True",
+                "type": "bool"
+              }
+            },
+            {
+              "value": {
+                "value": "hasRole",
+                "type": "string"
+              }
+            },
+            {
+              "value": {
+                "value": "False",
+                "type": "bool"
+              }
+            }
+          ],
+          "binary_constants": {}
+        }
+      },
+      {
+        "name": "_revokeRole(bytes32,address)",
+        "visibility": "internal",
+        "is_state_changing_entry_point": false,
+        "modifiers": [],
+        "storage_reads": [
+          "_roles"
+        ],
+        "storage_writes": [
+          "_roles"
+        ],
+        "internal_calls": [
+          "TMP_133(bool) = INTERNAL_CALL, AccessControl.hasRole(bytes32,address)(role,account)",
+          "TMP_134(address) = INTERNAL_CALL, Context._msgSender()()"
+        ],
+        "external_calls": [],
+        "cyclomatic_complexity": 1,
+        "require_printer_data": [],
+        "msg_sender_auth_checks": [],
+        "vars_and_auth_matrix": {
+          "state_variables_written": [
+            "_roles"
+          ],
+          "has_auth_guards": false
+        },
+        "echidna_fuzzing_vectors": {
+          "impacts_functions": [
+            "grantRole(bytes32,address)",
+            "renounceRole(bytes32,address)",
+            "hasRole(bytes32,address)",
+            "grantMintAndBurnRole(address)",
+            "revokeRole(bytes32,address)",
+            "burn(address,uint256)",
+            "getRoleAdmin(bytes32)",
+            "mint(address,uint256)"
+          ],
+          "is_impacted_by_functions": [
+            "revokeRole(bytes32,address)",
+            "renounceRole(bytes32,address)",
+            "grantRole(bytes32,address)",
+            "grantMintAndBurnRole(address)"
+          ],
+          "constants_discovered": [
+            {
+              "value": {
+                "value": "True",
+                "type": "bool"
+              }
+            },
+            {
+              "value": {
+                "value": "hasRole",
+                "type": "string"
+              }
+            },
+            {
+              "value": {
+                "value": "False",
+                "type": "bool"
+              }
+            }
+          ],
+          "binary_constants": {}
+        }
+      },
+      {
+        "name": "supportsInterface(bytes4)",
+        "visibility": "public",
+        "is_state_changing_entry_point": false,
+        "modifiers": [],
+        "storage_reads": [],
+        "storage_writes": [],
+        "internal_calls": [
+          "TMP_136(type(IERC165)) = SOLIDITY_CALL type()(IERC165)"
+        ],
+        "external_calls": [],
+        "cyclomatic_complexity": 1,
+        "require_printer_data": [],
+        "msg_sender_auth_checks": [],
+        "vars_and_auth_matrix": {
+          "state_variables_written": [],
+          "has_auth_guards": false
+        },
+        "echidna_fuzzing_vectors": {
+          "impacts_functions": [],
+          "is_impacted_by_functions": [],
+          "constants_discovered": [
+            {
+              "value": {
+                "value": "2036718347",
+                "type": "bytes4"
+              }
+            },
+            {
+              "value": {
+                "value": "33540519",
+                "type": "bytes4"
+              }
+            }
+          ],
+          "binary_constants": {}
+        }
+      },
+      {
+        "name": "supportsInterface(bytes4)",
+        "visibility": "external",
+        "is_state_changing_entry_point": false,
+        "modifiers": [],
+        "storage_reads": [],
+        "storage_writes": [],
+        "internal_calls": [],
+        "external_calls": [],
+        "cyclomatic_complexity": 2,
+        "require_printer_data": [],
+        "msg_sender_auth_checks": [],
+        "vars_and_auth_matrix": {
+          "state_variables_written": [],
+          "has_auth_guards": false
+        },
+        "echidna_fuzzing_vectors": {
+          "impacts_functions": [],
+          "is_impacted_by_functions": [],
+          "constants_discovered": [
+            {
+              "value": {
+                "value": "2036718347",
+                "type": "bytes4"
+              }
+            },
+            {
+              "value": {
+                "value": "33540519",
+                "type": "bytes4"
+              }
+            }
+          ],
+          "binary_constants": {}
+        }
+      },
+      {
+        "name": "hasRole(bytes32,address)",
+        "visibility": "external",
+        "is_state_changing_entry_point": false,
+        "modifiers": [],
+        "storage_reads": [],
+        "storage_writes": [],
+        "internal_calls": [],
+        "external_calls": [],
+        "cyclomatic_complexity": 2,
+        "require_printer_data": [],
+        "msg_sender_auth_checks": [],
+        "vars_and_auth_matrix": {
+          "state_variables_written": [],
+          "has_auth_guards": false
+        },
+        "echidna_fuzzing_vectors": {
+          "impacts_functions": [],
+          "is_impacted_by_functions": [],
+          "constants_discovered": [
+            {
+              "value": {
+                "value": "hasRole",
+                "type": "string"
+              }
+            }
+          ],
+          "binary_constants": {}
+        }
+      },
+      {
+        "name": "getRoleAdmin(bytes32)",
+        "visibility": "external",
+        "is_state_changing_entry_point": false,
+        "modifiers": [],
+        "storage_reads": [],
+        "storage_writes": [],
+        "internal_calls": [],
+        "external_calls": [],
+        "cyclomatic_complexity": 2,
+        "require_printer_data": [],
+        "msg_sender_auth_checks": [],
+        "vars_and_auth_matrix": {
+          "state_variables_written": [],
+          "has_auth_guards": false
+        },
+        "echidna_fuzzing_vectors": {
+          "impacts_functions": [],
+          "is_impacted_by_functions": [],
+          "constants_discovered": [
+            {
+              "value": {
+                "value": "adminRole",
+                "type": "string"
+              }
+            }
+          ],
+          "binary_constants": {}
+        }
+      },
+      {
+        "name": "grantRole(bytes32,address)",
+        "visibility": "external",
+        "is_state_changing_entry_point": true,
+        "modifiers": [],
+        "storage_reads": [],
+        "storage_writes": [],
+        "internal_calls": [],
+        "external_calls": [],
+        "cyclomatic_complexity": 2,
+        "require_printer_data": [],
+        "msg_sender_auth_checks": [],
+        "vars_and_auth_matrix": {
+          "state_variables_written": [
+            "_roles"
+          ],
+          "has_auth_guards": false
+        },
+        "echidna_fuzzing_vectors": {
+          "impacts_functions": [],
+          "is_impacted_by_functions": [],
+          "constants_discovered": [
+            {
+              "value": {
+                "value": "True",
+                "type": "bool"
+              }
+            },
+            {
+              "value": {
+                "value": "hasRole",
+                "type": "string"
+              }
+            },
+            {
+              "value": {
+                "value": "False",
+                "type": "bool"
+              }
+            },
+            {
+              "value": {
+                "value": "adminRole",
+                "type": "string"
+              }
+            }
+          ],
+          "binary_constants": {}
+        }
+      },
+      {
+        "name": "revokeRole(bytes32,address)",
+        "visibility": "external",
+        "is_state_changing_entry_point": true,
+        "modifiers": [],
+        "storage_reads": [],
+        "storage_writes": [],
+        "internal_calls": [],
+        "external_calls": [],
+        "cyclomatic_complexity": 2,
+        "require_printer_data": [],
+        "msg_sender_auth_checks": [],
+        "vars_and_auth_matrix": {
+          "state_variables_written": [
+            "_roles"
+          ],
+          "has_auth_guards": false
+        },
+        "echidna_fuzzing_vectors": {
+          "impacts_functions": [],
+          "is_impacted_by_functions": [],
+          "constants_discovered": [
+            {
+              "value": {
+                "value": "False",
+                "type": "bool"
+              }
+            },
+            {
+              "value": {
+                "value": "hasRole",
+                "type": "string"
+              }
+            },
+            {
+              "value": {
+                "value": "True",
+                "type": "bool"
+              }
+            },
+            {
+              "value": {
+                "value": "adminRole",
+                "type": "string"
+              }
+            }
+          ],
+          "binary_constants": {}
+        }
+      },
+      {
+        "name": "renounceRole(bytes32,address)",
+        "visibility": "external",
+        "is_state_changing_entry_point": true,
+        "modifiers": [],
+        "storage_reads": [],
+        "storage_writes": [],
+        "internal_calls": [],
+        "external_calls": [],
+        "cyclomatic_complexity": 2,
+        "require_printer_data": [],
+        "msg_sender_auth_checks": [],
+        "vars_and_auth_matrix": {
+          "state_variables_written": [
+            "_roles"
+          ],
+          "has_auth_guards": false
+        },
+        "echidna_fuzzing_vectors": {
+          "impacts_functions": [],
+          "is_impacted_by_functions": [],
+          "constants_discovered": [
+            {
+              "value": {
+                "value": "False",
+                "type": "bool"
+              }
+            },
+            {
+              "value": {
+                "value": "hasRole",
+                "type": "string"
+              }
+            },
+            {
+              "value": {
+                "value": "True",
+                "type": "bool"
+              }
+            }
+          ],
+          "binary_constants": {}
+        }
+      },
+      {
+        "name": "_msgSender()",
+        "visibility": "internal",
+        "is_state_changing_entry_point": false,
+        "modifiers": [],
+        "storage_reads": [
+          "msg.sender"
+        ],
+        "storage_writes": [],
+        "internal_calls": [],
+        "external_calls": [],
+        "cyclomatic_complexity": 1,
+        "require_printer_data": [],
+        "msg_sender_auth_checks": [],
+        "vars_and_auth_matrix": {
+          "state_variables_written": [],
+          "has_auth_guards": false
+        },
+        "echidna_fuzzing_vectors": {
+          "impacts_functions": [],
+          "is_impacted_by_functions": [],
+          "constants_discovered": [],
+          "binary_constants": {}
+        }
+      },
+      {
+        "name": "_msgData()",
+        "visibility": "internal",
+        "is_state_changing_entry_point": false,
+        "modifiers": [],
+        "storage_reads": [
+          "msg.data"
+        ],
+        "storage_writes": [],
+        "internal_calls": [],
+        "external_calls": [],
+        "cyclomatic_complexity": 1,
+        "require_printer_data": [],
+        "msg_sender_auth_checks": [],
+        "vars_and_auth_matrix": {
+          "state_variables_written": [],
+          "has_auth_guards": false
+        },
+        "echidna_fuzzing_vectors": {
+          "impacts_functions": [],
+          "is_impacted_by_functions": [],
+          "constants_discovered": [],
+          "binary_constants": {}
+        }
+      },
+      {
+        "name": "_contextSuffixLength()",
+        "visibility": "internal",
+        "is_state_changing_entry_point": false,
+        "modifiers": [],
+        "storage_reads": [],
+        "storage_writes": [],
+        "internal_calls": [],
+        "external_calls": [],
+        "cyclomatic_complexity": 1,
+        "require_printer_data": [],
+        "msg_sender_auth_checks": [],
+        "vars_and_auth_matrix": {
+          "state_variables_written": [],
+          "has_auth_guards": false
+        },
+        "echidna_fuzzing_vectors": {
+          "impacts_functions": [],
+          "is_impacted_by_functions": [],
+          "constants_discovered": [
+            {
+              "value": {
+                "value": "0",
+                "type": "uint256"
+              }
+            }
+          ],
+          "binary_constants": {}
+        }
+      },
+      {
+        "name": "constructor(address)",
+        "visibility": "internal",
+        "is_state_changing_entry_point": false,
+        "modifiers": [],
+        "storage_reads": [],
+        "storage_writes": [],
+        "internal_calls": [
+          "INTERNAL_CALL, Ownable._transferOwnership(address)(initialOwner)",
+          "TMP_141(None) = SOLIDITY_CALL revert OwnableInvalidOwner(address)(TMP_140)"
+        ],
+        "external_calls": [],
+        "cyclomatic_complexity": 2,
+        "require_printer_data": [],
+        "msg_sender_auth_checks": [],
+        "vars_and_auth_matrix": {
+          "state_variables_written": [
+            "_owner"
+          ],
+          "has_auth_guards": false
+        },
+        "echidna_fuzzing_vectors": {
+          "impacts_functions": [],
+          "is_impacted_by_functions": [],
+          "constants_discovered": [],
+          "binary_constants": {}
+        }
+      },
+      {
+        "name": "owner()",
+        "visibility": "public",
+        "is_state_changing_entry_point": false,
+        "modifiers": [],
+        "storage_reads": [
+          "_owner"
+        ],
+        "storage_writes": [],
+        "internal_calls": [],
+        "external_calls": [],
+        "cyclomatic_complexity": 1,
+        "require_printer_data": [],
+        "msg_sender_auth_checks": [],
+        "vars_and_auth_matrix": {
+          "state_variables_written": [],
+          "has_auth_guards": false
+        },
+        "echidna_fuzzing_vectors": {
+          "impacts_functions": [],
+          "is_impacted_by_functions": [
+            "renounceOwnership()",
+            "constructor()",
+            "transferOwnership(address)"
+          ],
+          "constants_discovered": [],
+          "binary_constants": {}
+        }
+      },
+      {
+        "name": "_checkOwner()",
+        "visibility": "internal",
+        "is_state_changing_entry_point": false,
+        "modifiers": [],
+        "storage_reads": [],
+        "storage_writes": [],
+        "internal_calls": [
+          "TMP_143(address) = INTERNAL_CALL, Ownable.owner()()",
+          "TMP_144(address) = INTERNAL_CALL, Context._msgSender()()",
+          "TMP_146(address) = INTERNAL_CALL, Context._msgSender()()",
+          "TMP_147(None) = SOLIDITY_CALL revert OwnableUnauthorizedAccount(address)(TMP_146)"
+        ],
+        "external_calls": [],
+        "cyclomatic_complexity": 2,
+        "require_printer_data": [],
+        "msg_sender_auth_checks": [],
+        "vars_and_auth_matrix": {
+          "state_variables_written": [],
+          "has_auth_guards": false
+        },
+        "echidna_fuzzing_vectors": {
+          "impacts_functions": [],
+          "is_impacted_by_functions": [],
+          "constants_discovered": [],
+          "binary_constants": {}
+        }
+      },
+      {
+        "name": "renounceOwnership()",
+        "visibility": "public",
+        "is_state_changing_entry_point": true,
+        "modifiers": [
+          "onlyOwner"
+        ],
+        "storage_reads": [],
+        "storage_writes": [],
+        "internal_calls": [
+          "INTERNAL_CALL, Ownable._transferOwnership(address)(TMP_148)",
+          "MODIFIER_CALL, Ownable.onlyOwner()()"
+        ],
+        "external_calls": [],
+        "cyclomatic_complexity": 1,
+        "require_printer_data": [],
+        "msg_sender_auth_checks": [],
+        "vars_and_auth_matrix": {
+          "state_variables_written": [
+            "_owner"
+          ],
+          "has_auth_guards": false
+        },
+        "echidna_fuzzing_vectors": {
+          "impacts_functions": [],
+          "is_impacted_by_functions": [],
+          "constants_discovered": [],
+          "binary_constants": {}
+        }
+      },
+      {
+        "name": "transferOwnership(address)",
+        "visibility": "public",
+        "is_state_changing_entry_point": true,
+        "modifiers": [
+          "onlyOwner"
+        ],
+        "storage_reads": [],
+        "storage_writes": [],
+        "internal_calls": [
+          "INTERNAL_CALL, Ownable._transferOwnership(address)(newOwner)",
+          "MODIFIER_CALL, Ownable.onlyOwner()()",
+          "TMP_154(None) = SOLIDITY_CALL revert OwnableInvalidOwner(address)(TMP_153)"
+        ],
+        "external_calls": [],
+        "cyclomatic_complexity": 2,
+        "require_printer_data": [],
+        "msg_sender_auth_checks": [],
+        "vars_and_auth_matrix": {
+          "state_variables_written": [
+            "_owner"
+          ],
+          "has_auth_guards": false
+        },
+        "echidna_fuzzing_vectors": {
+          "impacts_functions": [],
+          "is_impacted_by_functions": [],
+          "constants_discovered": [],
+          "binary_constants": {}
+        }
+      },
+      {
+        "name": "_transferOwnership(address)",
+        "visibility": "internal",
+        "is_state_changing_entry_point": false,
+        "modifiers": [],
+        "storage_reads": [
+          "_owner"
+        ],
+        "storage_writes": [
+          "_owner"
+        ],
+        "internal_calls": [],
+        "external_calls": [],
+        "cyclomatic_complexity": 1,
+        "require_printer_data": [],
+        "msg_sender_auth_checks": [],
+        "vars_and_auth_matrix": {
+          "state_variables_written": [
+            "_owner"
+          ],
+          "has_auth_guards": false
+        },
+        "echidna_fuzzing_vectors": {
+          "impacts_functions": [
+            "constructor()",
+            "transferOwnership(address)",
+            "grantMintAndBurnRole(address)",
+            "owner()",
+            "renounceOwnership()",
+            "setInterestRate(uint256)"
+          ],
+          "is_impacted_by_functions": [
+            "renounceOwnership()",
+            "constructor()",
+            "transferOwnership(address)"
+          ],
+          "constants_discovered": [],
+          "binary_constants": {}
+        }
+      },
+      {
+        "name": "constructor(string,string)",
+        "visibility": "internal",
+        "is_state_changing_entry_point": false,
+        "modifiers": [],
+        "storage_reads": [],
+        "storage_writes": [
+          "_name",
+          "_symbol"
+        ],
+        "internal_calls": [],
+        "external_calls": [],
+        "cyclomatic_complexity": 1,
+        "require_printer_data": [],
+        "msg_sender_auth_checks": [],
+        "vars_and_auth_matrix": {
+          "state_variables_written": [
+            "_name",
+            "_symbol"
+          ],
+          "has_auth_guards": false
+        },
+        "echidna_fuzzing_vectors": {
+          "impacts_functions": [
+            "name()",
+            "symbol()"
+          ],
+          "is_impacted_by_functions": [],
+          "constants_discovered": [],
+          "binary_constants": {}
+        }
+      },
+      {
+        "name": "name()",
+        "visibility": "public",
+        "is_state_changing_entry_point": false,
+        "modifiers": [],
+        "storage_reads": [
+          "_name"
+        ],
+        "storage_writes": [],
+        "internal_calls": [],
+        "external_calls": [],
+        "cyclomatic_complexity": 1,
+        "require_printer_data": [],
+        "msg_sender_auth_checks": [],
+        "vars_and_auth_matrix": {
+          "state_variables_written": [],
+          "has_auth_guards": false
+        },
+        "echidna_fuzzing_vectors": {
+          "impacts_functions": [],
+          "is_impacted_by_functions": [
+            "constructor()"
+          ],
+          "constants_discovered": [],
+          "binary_constants": {}
+        }
+      },
+      {
+        "name": "symbol()",
+        "visibility": "public",
+        "is_state_changing_entry_point": false,
+        "modifiers": [],
+        "storage_reads": [
+          "_symbol"
+        ],
+        "storage_writes": [],
+        "internal_calls": [],
+        "external_calls": [],
+        "cyclomatic_complexity": 1,
+        "require_printer_data": [],
+        "msg_sender_auth_checks": [],
+        "vars_and_auth_matrix": {
+          "state_variables_written": [],
+          "has_auth_guards": false
+        },
+        "echidna_fuzzing_vectors": {
+          "impacts_functions": [],
+          "is_impacted_by_functions": [
+            "constructor()"
+          ],
+          "constants_discovered": [],
+          "binary_constants": {}
+        }
+      },
+      {
+        "name": "decimals()",
+        "visibility": "public",
+        "is_state_changing_entry_point": false,
+        "modifiers": [],
+        "storage_reads": [],
+        "storage_writes": [],
+        "internal_calls": [],
+        "external_calls": [],
+        "cyclomatic_complexity": 1,
+        "require_printer_data": [],
+        "msg_sender_auth_checks": [],
+        "vars_and_auth_matrix": {
+          "state_variables_written": [],
+          "has_auth_guards": false
+        },
+        "echidna_fuzzing_vectors": {
+          "impacts_functions": [],
+          "is_impacted_by_functions": [],
+          "constants_discovered": [
+            {
+              "value": {
+                "value": "18",
+                "type": "uint256"
+              }
+            }
+          ],
+          "binary_constants": {}
+        }
+      },
+      {
+        "name": "totalSupply()",
+        "visibility": "public",
+        "is_state_changing_entry_point": false,
+        "modifiers": [],
+        "storage_reads": [
+          "_totalSupply"
+        ],
+        "storage_writes": [],
+        "internal_calls": [],
+        "external_calls": [],
+        "cyclomatic_complexity": 1,
+        "require_printer_data": [],
+        "msg_sender_auth_checks": [],
+        "vars_and_auth_matrix": {
+          "state_variables_written": [],
+          "has_auth_guards": false
+        },
+        "echidna_fuzzing_vectors": {
+          "impacts_functions": [],
+          "is_impacted_by_functions": [
+            "burn(address,uint256)",
+            "transfer(address,uint256)",
+            "transferFrom(address,address,uint256)",
+            "mint(address,uint256)"
+          ],
+          "constants_discovered": [],
+          "binary_constants": {}
+        }
+      },
+      {
+        "name": "balanceOf(address)",
+        "visibility": "public",
+        "is_state_changing_entry_point": false,
+        "modifiers": [],
+        "storage_reads": [
+          "_balances"
+        ],
+        "storage_writes": [],
+        "internal_calls": [],
+        "external_calls": [],
+        "cyclomatic_complexity": 1,
+        "require_printer_data": [],
+        "msg_sender_auth_checks": [],
+        "vars_and_auth_matrix": {
+          "state_variables_written": [],
+          "has_auth_guards": false
+        },
+        "echidna_fuzzing_vectors": {
+          "impacts_functions": [],
+          "is_impacted_by_functions": [
+            "burn(address,uint256)",
+            "transfer(address,uint256)",
+            "transferFrom(address,address,uint256)",
+            "mint(address,uint256)"
+          ],
+          "constants_discovered": [],
+          "binary_constants": {}
+        }
+      },
+      {
+        "name": "transfer(address,uint256)",
+        "visibility": "public",
+        "is_state_changing_entry_point": false,
+        "modifiers": [],
+        "storage_reads": [],
+        "storage_writes": [],
+        "internal_calls": [
+          "INTERNAL_CALL, ERC20._transfer(address,address,uint256)(owner,to,value)",
+          "TMP_158(address) = INTERNAL_CALL, Context._msgSender()()"
+        ],
+        "external_calls": [],
+        "cyclomatic_complexity": 1,
+        "require_printer_data": [],
+        "msg_sender_auth_checks": [],
+        "vars_and_auth_matrix": {
+          "state_variables_written": [
+            "_balances",
+            "_totalSupply"
+          ],
+          "has_auth_guards": false
+        },
+        "echidna_fuzzing_vectors": {
+          "impacts_functions": [],
+          "is_impacted_by_functions": [],
+          "constants_discovered": [],
+          "binary_constants": {}
+        }
+      },
+      {
+        "name": "allowance(address,address)",
+        "visibility": "public",
+        "is_state_changing_entry_point": false,
+        "modifiers": [],
+        "storage_reads": [
+          "_allowances"
+        ],
+        "storage_writes": [],
+        "internal_calls": [],
+        "external_calls": [],
+        "cyclomatic_complexity": 1,
+        "require_printer_data": [],
+        "msg_sender_auth_checks": [],
+        "vars_and_auth_matrix": {
+          "state_variables_written": [],
+          "has_auth_guards": false
+        },
+        "echidna_fuzzing_vectors": {
+          "impacts_functions": [],
+          "is_impacted_by_functions": [
+            "transferFrom(address,address,uint256)",
+            "approve(address,uint256)"
+          ],
+          "constants_discovered": [],
+          "binary_constants": {}
+        }
+      },
+      {
+        "name": "approve(address,uint256)",
+        "visibility": "public",
+        "is_state_changing_entry_point": true,
+        "modifiers": [],
+        "storage_reads": [],
+        "storage_writes": [],
+        "internal_calls": [
+          "INTERNAL_CALL, ERC20._approve(address,address,uint256)(owner,spender,value)",
+          "TMP_160(address) = INTERNAL_CALL, Context._msgSender()()"
+        ],
+        "external_calls": [],
+        "cyclomatic_complexity": 1,
+        "require_printer_data": [],
+        "msg_sender_auth_checks": [],
+        "vars_and_auth_matrix": {
+          "state_variables_written": [
+            "_allowances"
+          ],
+          "has_auth_guards": false
+        },
+        "echidna_fuzzing_vectors": {
+          "impacts_functions": [],
+          "is_impacted_by_functions": [],
+          "constants_discovered": [],
+          "binary_constants": {}
+        }
+      },
+      {
+        "name": "transferFrom(address,address,uint256)",
+        "visibility": "public",
+        "is_state_changing_entry_point": false,
+        "modifiers": [],
+        "storage_reads": [],
+        "storage_writes": [],
+        "internal_calls": [
+          "INTERNAL_CALL, ERC20._spendAllowance(address,address,uint256)(from,spender,value)",
+          "INTERNAL_CALL, ERC20._transfer(address,address,uint256)(from,to,value)",
+          "TMP_162(address) = INTERNAL_CALL, Context._msgSender()()"
+        ],
+        "external_calls": [],
+        "cyclomatic_complexity": 1,
+        "require_printer_data": [],
+        "msg_sender_auth_checks": [],
+        "vars_and_auth_matrix": {
+          "state_variables_written": [
+            "_allowances",
+            "_balances",
+            "_totalSupply"
+          ],
+          "has_auth_guards": false
+        },
+        "echidna_fuzzing_vectors": {
+          "impacts_functions": [],
+          "is_impacted_by_functions": [],
+          "constants_discovered": [],
+          "binary_constants": {}
+        }
+      },
+      {
+        "name": "_transfer(address,address,uint256)",
+        "visibility": "internal",
+        "is_state_changing_entry_point": false,
+        "modifiers": [],
+        "storage_reads": [],
+        "storage_writes": [],
+        "internal_calls": [
+          "INTERNAL_CALL, ERC20._update(address,address,uint256)(from,to,value)",
+          "TMP_168(None) = SOLIDITY_CALL revert ERC20InvalidSender(address)(TMP_167)",
+          "TMP_172(None) = SOLIDITY_CALL revert ERC20InvalidReceiver(address)(TMP_171)"
+        ],
+        "external_calls": [],
+        "cyclomatic_complexity": 3,
+        "require_printer_data": [],
+        "msg_sender_auth_checks": [],
+        "vars_and_auth_matrix": {
+          "state_variables_written": [
+            "_balances",
+            "_totalSupply"
+          ],
+          "has_auth_guards": false
+        },
+        "echidna_fuzzing_vectors": {
+          "impacts_functions": [],
+          "is_impacted_by_functions": [],
+          "constants_discovered": [],
+          "binary_constants": {}
+        }
+      },
+      {
+        "name": "_update(address,address,uint256)",
+        "visibility": "internal",
+        "is_state_changing_entry_point": false,
+        "modifiers": [],
+        "storage_reads": [
+          "_balances",
+          "_totalSupply"
+        ],
+        "storage_writes": [
+          "_balances",
+          "_totalSupply"
+        ],
+        "internal_calls": [
+          "TMP_177(None) = SOLIDITY_CALL revert ERC20InsufficientBalance(address,uint256,uint256)(from,fromBalance,value)"
+        ],
+        "external_calls": [],
+        "cyclomatic_complexity": 4,
+        "require_printer_data": [],
+        "msg_sender_auth_checks": [],
+        "vars_and_auth_matrix": {
+          "state_variables_written": [
+            "_balances",
+            "_totalSupply"
+          ],
+          "has_auth_guards": false
+        },
+        "echidna_fuzzing_vectors": {
+          "impacts_functions": [
+            "balanceOf(address)",
+            "totalSupply()",
+            "principleBalanceOf(address)",
+            "transfer(address,uint256)",
+            "transferFrom(address,address,uint256)",
+            "burn(address,uint256)",
+            "mint(address,uint256)"
+          ],
+          "is_impacted_by_functions": [
+            "burn(address,uint256)",
+            "transfer(address,uint256)",
+            "transferFrom(address,address,uint256)",
+            "mint(address,uint256)"
+          ],
+          "constants_discovered": [],
+          "binary_constants": {}
+        }
+      },
+      {
+        "name": "_mint(address,uint256)",
+        "visibility": "internal",
+        "is_state_changing_entry_point": false,
+        "modifiers": [],
+        "storage_reads": [],
+        "storage_writes": [],
+        "internal_calls": [
+          "INTERNAL_CALL, ERC20._update(address,address,uint256)(TMP_186,account,value)",
+          "TMP_185(None) = SOLIDITY_CALL revert ERC20InvalidReceiver(address)(TMP_184)"
+        ],
+        "external_calls": [],
+        "cyclomatic_complexity": 2,
+        "require_printer_data": [],
+        "msg_sender_auth_checks": [],
+        "vars_and_auth_matrix": {
+          "state_variables_written": [
+            "_balances",
+            "_totalSupply"
+          ],
+          "has_auth_guards": false
+        },
+        "echidna_fuzzing_vectors": {
+          "impacts_functions": [],
+          "is_impacted_by_functions": [],
+          "constants_discovered": [],
+          "binary_constants": {}
+        }
+      },
+      {
+        "name": "_burn(address,uint256)",
+        "visibility": "internal",
+        "is_state_changing_entry_point": false,
+        "modifiers": [],
+        "storage_reads": [],
+        "storage_writes": [],
+        "internal_calls": [
+          "INTERNAL_CALL, ERC20._update(address,address,uint256)(account,TMP_192,value)",
+          "TMP_191(None) = SOLIDITY_CALL revert ERC20InvalidSender(address)(TMP_190)"
+        ],
+        "external_calls": [],
+        "cyclomatic_complexity": 2,
+        "require_printer_data": [],
+        "msg_sender_auth_checks": [],
+        "vars_and_auth_matrix": {
+          "state_variables_written": [
+            "_balances",
+            "_totalSupply"
+          ],
+          "has_auth_guards": false
+        },
+        "echidna_fuzzing_vectors": {
+          "impacts_functions": [],
+          "is_impacted_by_functions": [],
+          "constants_discovered": [],
+          "binary_constants": {}
+        }
+      },
+      {
+        "name": "_approve(address,address,uint256)",
+        "visibility": "internal",
+        "is_state_changing_entry_point": false,
+        "modifiers": [],
+        "storage_reads": [],
+        "storage_writes": [],
+        "internal_calls": [
+          "INTERNAL_CALL, ERC20._approve(address,address,uint256,bool)(owner,spender,value,True)"
+        ],
+        "external_calls": [],
+        "cyclomatic_complexity": 1,
+        "require_printer_data": [],
+        "msg_sender_auth_checks": [],
+        "vars_and_auth_matrix": {
+          "state_variables_written": [
+            "_allowances"
+          ],
+          "has_auth_guards": false
+        },
+        "echidna_fuzzing_vectors": {
+          "impacts_functions": [],
+          "is_impacted_by_functions": [],
+          "constants_discovered": [],
+          "binary_constants": {}
+        }
+      },
+      {
+        "name": "_approve(address,address,uint256,bool)",
+        "visibility": "internal",
+        "is_state_changing_entry_point": false,
+        "modifiers": [],
+        "storage_reads": [],
+        "storage_writes": [
+          "_allowances"
+        ],
+        "internal_calls": [
+          "TMP_198(None) = SOLIDITY_CALL revert ERC20InvalidApprover(address)(TMP_197)",
+          "TMP_202(None) = SOLIDITY_CALL revert ERC20InvalidSpender(address)(TMP_201)"
+        ],
+        "external_calls": [],
+        "cyclomatic_complexity": 4,
+        "require_printer_data": [],
+        "msg_sender_auth_checks": [],
+        "vars_and_auth_matrix": {
+          "state_variables_written": [
+            "_allowances"
+          ],
+          "has_auth_guards": false
+        },
+        "echidna_fuzzing_vectors": {
+          "impacts_functions": [
+            "transferFrom(address,address,uint256)",
+            "allowance(address,address)"
+          ],
+          "is_impacted_by_functions": [],
+          "constants_discovered": [],
+          "binary_constants": {}
+        }
+      },
+      {
+        "name": "_spendAllowance(address,address,uint256)",
+        "visibility": "internal",
+        "is_state_changing_entry_point": false,
+        "modifiers": [],
+        "storage_reads": [],
+        "storage_writes": [],
+        "internal_calls": [
+          "INTERNAL_CALL, ERC20._approve(address,address,uint256,bool)(owner,spender,TMP_210,False)",
+          "TMP_204(uint256) = INTERNAL_CALL, ERC20.allowance(address,address)(owner,spender)",
+          "TMP_209(None) = SOLIDITY_CALL revert ERC20InsufficientAllowance(address,uint256,uint256)(spender,currentAllowance,value)"
+        ],
+        "external_calls": [],
+        "cyclomatic_complexity": 3,
+        "require_printer_data": [],
+        "msg_sender_auth_checks": [],
+        "vars_and_auth_matrix": {
+          "state_variables_written": [
+            "_allowances"
+          ],
+          "has_auth_guards": false
+        },
+        "echidna_fuzzing_vectors": {
+          "impacts_functions": [],
+          "is_impacted_by_functions": [],
+          "constants_discovered": [],
+          "binary_constants": {}
+        }
+      },
+      {
+        "name": "name()",
+        "visibility": "external",
+        "is_state_changing_entry_point": false,
+        "modifiers": [],
+        "storage_reads": [],
+        "storage_writes": [],
+        "internal_calls": [],
+        "external_calls": [],
+        "cyclomatic_complexity": 2,
+        "require_printer_data": [],
+        "msg_sender_auth_checks": [],
+        "vars_and_auth_matrix": {
+          "state_variables_written": [],
+          "has_auth_guards": false
+        },
+        "echidna_fuzzing_vectors": {
+          "impacts_functions": [],
+          "is_impacted_by_functions": [],
+          "constants_discovered": [],
+          "binary_constants": {}
+        }
+      },
+      {
+        "name": "symbol()",
+        "visibility": "external",
+        "is_state_changing_entry_point": false,
+        "modifiers": [],
+        "storage_reads": [],
+        "storage_writes": [],
+        "internal_calls": [],
+        "external_calls": [],
+        "cyclomatic_complexity": 2,
+        "require_printer_data": [],
+        "msg_sender_auth_checks": [],
+        "vars_and_auth_matrix": {
+          "state_variables_written": [],
+          "has_auth_guards": false
+        },
+        "echidna_fuzzing_vectors": {
+          "impacts_functions": [],
+          "is_impacted_by_functions": [],
+          "constants_discovered": [],
+          "binary_constants": {}
+        }
+      },
+      {
+        "name": "decimals()",
+        "visibility": "external",
+        "is_state_changing_entry_point": false,
+        "modifiers": [],
+        "storage_reads": [],
+        "storage_writes": [],
+        "internal_calls": [],
+        "external_calls": [],
+        "cyclomatic_complexity": 2,
+        "require_printer_data": [],
+        "msg_sender_auth_checks": [],
+        "vars_and_auth_matrix": {
+          "state_variables_written": [],
+          "has_auth_guards": false
+        },
+        "echidna_fuzzing_vectors": {
+          "impacts_functions": [],
+          "is_impacted_by_functions": [],
+          "constants_discovered": [
+            {
+              "value": {
+                "value": "18",
+                "type": "uint256"
+              }
+            }
+          ],
+          "binary_constants": {}
+        }
+      },
+      {
+        "name": "totalSupply()",
+        "visibility": "external",
+        "is_state_changing_entry_point": false,
+        "modifiers": [],
+        "storage_reads": [],
+        "storage_writes": [],
+        "internal_calls": [],
+        "external_calls": [],
+        "cyclomatic_complexity": 2,
+        "require_printer_data": [],
+        "msg_sender_auth_checks": [],
+        "vars_and_auth_matrix": {
+          "state_variables_written": [],
+          "has_auth_guards": false
+        },
+        "echidna_fuzzing_vectors": {
+          "impacts_functions": [],
+          "is_impacted_by_functions": [],
+          "constants_discovered": [],
+          "binary_constants": {}
+        }
+      },
+      {
+        "name": "balanceOf(address)",
+        "visibility": "external",
+        "is_state_changing_entry_point": false,
+        "modifiers": [],
+        "storage_reads": [],
+        "storage_writes": [],
+        "internal_calls": [],
+        "external_calls": [],
+        "cyclomatic_complexity": 2,
+        "require_printer_data": [],
+        "msg_sender_auth_checks": [],
+        "vars_and_auth_matrix": {
+          "state_variables_written": [],
+          "has_auth_guards": false
+        },
+        "echidna_fuzzing_vectors": {
+          "impacts_functions": [],
+          "is_impacted_by_functions": [],
+          "constants_discovered": [],
+          "binary_constants": {}
+        }
+      },
+      {
+        "name": "transfer(address,uint256)",
+        "visibility": "external",
+        "is_state_changing_entry_point": false,
+        "modifiers": [],
+        "storage_reads": [],
+        "storage_writes": [],
+        "internal_calls": [],
+        "external_calls": [],
+        "cyclomatic_complexity": 2,
+        "require_printer_data": [],
+        "msg_sender_auth_checks": [],
+        "vars_and_auth_matrix": {
+          "state_variables_written": [
+            "_balances",
+            "_totalSupply"
+          ],
+          "has_auth_guards": false
+        },
+        "echidna_fuzzing_vectors": {
+          "impacts_functions": [],
+          "is_impacted_by_functions": [],
+          "constants_discovered": [],
+          "binary_constants": {}
+        }
+      },
+      {
+        "name": "allowance(address,address)",
+        "visibility": "external",
+        "is_state_changing_entry_point": false,
+        "modifiers": [],
+        "storage_reads": [],
+        "storage_writes": [],
+        "internal_calls": [],
+        "external_calls": [],
+        "cyclomatic_complexity": 2,
+        "require_printer_data": [],
+        "msg_sender_auth_checks": [],
+        "vars_and_auth_matrix": {
+          "state_variables_written": [],
+          "has_auth_guards": false
+        },
+        "echidna_fuzzing_vectors": {
+          "impacts_functions": [],
+          "is_impacted_by_functions": [],
+          "constants_discovered": [],
+          "binary_constants": {}
+        }
+      },
+      {
+        "name": "approve(address,uint256)",
+        "visibility": "external",
+        "is_state_changing_entry_point": true,
+        "modifiers": [],
+        "storage_reads": [],
+        "storage_writes": [],
+        "internal_calls": [],
+        "external_calls": [],
+        "cyclomatic_complexity": 2,
+        "require_printer_data": [],
+        "msg_sender_auth_checks": [],
+        "vars_and_auth_matrix": {
+          "state_variables_written": [
+            "_allowances"
+          ],
+          "has_auth_guards": false
+        },
+        "echidna_fuzzing_vectors": {
+          "impacts_functions": [],
+          "is_impacted_by_functions": [],
+          "constants_discovered": [],
+          "binary_constants": {}
+        }
+      },
+      {
+        "name": "transferFrom(address,address,uint256)",
+        "visibility": "external",
+        "is_state_changing_entry_point": false,
+        "modifiers": [],
+        "storage_reads": [],
+        "storage_writes": [],
+        "internal_calls": [],
+        "external_calls": [],
+        "cyclomatic_complexity": 2,
+        "require_printer_data": [],
+        "msg_sender_auth_checks": [],
+        "vars_and_auth_matrix": {
+          "state_variables_written": [
+            "_allowances",
+            "_balances",
+            "_totalSupply"
+          ],
+          "has_auth_guards": false
+        },
+        "echidna_fuzzing_vectors": {
+          "impacts_functions": [],
+          "is_impacted_by_functions": [],
+          "constants_discovered": [],
+          "binary_constants": {}
+        }
+      },
+      {
+        "name": "constructor()",
+        "visibility": "public",
+        "is_state_changing_entry_point": false,
+        "modifiers": [],
+        "storage_reads": [
+          "msg.sender"
+        ],
+        "storage_writes": [],
+        "internal_calls": [
+          "INTERNAL_CALL, ERC20.constructor(string,string)(Rebase Token,RBT)",
+          "INTERNAL_CALL, Ownable.constructor(address)(msg.sender)"
+        ],
+        "external_calls": [],
+        "cyclomatic_complexity": 1,
+        "require_printer_data": [],
+        "msg_sender_auth_checks": [],
+        "vars_and_auth_matrix": {
+          "state_variables_written": [
+            "_name",
+            "_owner",
+            "_symbol"
+          ],
+          "has_auth_guards": false
+        },
+        "echidna_fuzzing_vectors": {
+          "impacts_functions": [],
+          "is_impacted_by_functions": [],
+          "constants_discovered": [],
+          "binary_constants": {}
+        }
+      },
+      {
+        "name": "grantMintAndBurnRole(address)",
+        "visibility": "external",
+        "is_state_changing_entry_point": true,
+        "modifiers": [
+          "onlyOwner"
+        ],
+        "storage_reads": [
+          "MINT_AND_BURN_ROLE"
+        ],
+        "storage_writes": [],
+        "internal_calls": [
+          "MODIFIER_CALL, Ownable.onlyOwner()()",
+          "TMP_214(bool) = INTERNAL_CALL, AccessControl._grantRole(bytes32,address)(MINT_AND_BURN_ROLE,_account)"
+        ],
+        "external_calls": [],
+        "cyclomatic_complexity": 1,
+        "require_printer_data": [],
+        "msg_sender_auth_checks": [],
+        "vars_and_auth_matrix": {
+          "state_variables_written": [
+            "_roles"
+          ],
+          "has_auth_guards": false
+        },
+        "echidna_fuzzing_vectors": {
+          "impacts_functions": [],
+          "is_impacted_by_functions": [],
+          "constants_discovered": [
+            {
+              "value": {
+                "value": "hasRole",
+                "type": "string"
+              }
+            },
+            {
+              "value": {
+                "value": "False",
+                "type": "bool"
+              }
+            },
+            {
+              "value": {
+                "value": "MINT_AND_BURN_ROLE",
+                "type": "string"
+              }
+            },
+            {
+              "value": {
+                "value": "True",
+                "type": "bool"
+              }
+            },
+            {
+              "value": {
+                "value": "b't)U[\\x03\\xaa\\\\\\xf0\\x8c\\xc5\\xfc\\x08\\x90\\xc9}\\xb2\\x95\\xc9\\xce\\xc5\\xe6\\xbb\\x15D\\xbc\\xd7\\xfd\\x140\\xda\\xe3\\xe2'",
+                "type": "bytes32"
+              }
+            }
+          ],
+          "binary_constants": {}
+        }
+      },
+      {
+        "name": "setInterestRate(uint256)",
+        "visibility": "external",
+        "is_state_changing_entry_point": true,
+        "modifiers": [
+          "onlyOwner"
+        ],
+        "storage_reads": [
+          "s_interestRate"
+        ],
+        "storage_writes": [
+          "s_interestRate"
+        ],
+        "internal_calls": [
+          "MODIFIER_CALL, Ownable.onlyOwner()()",
+          "TMP_217(None) = SOLIDITY_CALL revert RebaseToken__InterestRateCanOnlyDecrease(uint256,uint256)(s_interestRate,_newInterestRate)"
+        ],
+        "external_calls": [],
+        "cyclomatic_complexity": 2,
+        "require_printer_data": [],
+        "msg_sender_auth_checks": [],
+        "vars_and_auth_matrix": {
+          "state_variables_written": [
+            "s_interestRate"
+          ],
+          "has_auth_guards": false
+        },
+        "echidna_fuzzing_vectors": {
+          "impacts_functions": [
+            "mint(address,uint256)",
+            "getInterestRate()"
+          ],
+          "is_impacted_by_functions": [],
+          "constants_discovered": [
+            {
+              "value": {
+                "value": "100000000",
+                "type": "uint256"
+              }
+            },
+            {
+              "value": {
+                "value": "1000000000000000000",
+                "type": "uint256"
+              }
+            },
+            {
+              "value": {
+                "value": "5",
+                "type": "uint256"
+              }
+            },
+            {
+              "value": {
+                "value": "5000000000000000000",
+                "type": "uint256"
+              }
+            },
+            {
+              "value": {
+                "value": "50000000000",
+                "type": "uint256"
+              }
+            }
+          ],
+          "binary_constants": {
+            "BinaryType.MULTIPLICATION": [
+              {
+                "value": {
+                  "value": "5",
+                  "type": "uint256"
+                }
+              }
+            ],
+            "BinaryType.DIVISION": [
+              {
+                "value": {
+                  "value": "100000000",
+                  "type": "uint256"
+                }
+              }
+            ]
+          }
+        }
+      },
+      {
+        "name": "principleBalanceOf(address)",
+        "visibility": "external",
+        "is_state_changing_entry_point": false,
+        "modifiers": [],
+        "storage_reads": [],
+        "storage_writes": [],
+        "internal_calls": [
+          "TMP_220(uint256) = INTERNAL_CALL, ERC20.balanceOf(address)(_user)"
+        ],
+        "external_calls": [],
+        "cyclomatic_complexity": 1,
+        "require_printer_data": [],
+        "msg_sender_auth_checks": [],
+        "vars_and_auth_matrix": {
+          "state_variables_written": [],
+          "has_auth_guards": false
+        },
+        "echidna_fuzzing_vectors": {
+          "impacts_functions": [],
+          "is_impacted_by_functions": [],
+          "constants_discovered": [],
+          "binary_constants": {}
+        }
+      },
+      {
+        "name": "mint(address,uint256)",
+        "visibility": "external",
+        "is_state_changing_entry_point": true,
+        "modifiers": [
+          "onlyRole"
+        ],
+        "storage_reads": [
+          "MINT_AND_BURN_ROLE",
+          "s_interestRate"
+        ],
+        "storage_writes": [
+          "s_userInterestRate"
+        ],
+        "internal_calls": [
+          "INTERNAL_CALL, ERC20._mint(address,uint256)(_to,_amount)",
+          "INTERNAL_CALL, RebaseToken._mintAccruedInterest(address)(_to)",
+          "MODIFIER_CALL, AccessControl.onlyRole(bytes32)(MINT_AND_BURN_ROLE)"
+        ],
+        "external_calls": [],
+        "cyclomatic_complexity": 1,
+        "require_printer_data": [],
+        "msg_sender_auth_checks": [],
+        "vars_and_auth_matrix": {
+          "state_variables_written": [
+            "_balances",
+            "_totalSupply",
+            "s_userInterestRate",
+            "s_userLastUpdatedTimestamp"
+          ],
+          "has_auth_guards": false
+        },
+        "echidna_fuzzing_vectors": {
+          "impacts_functions": [
+            "balanceOf(address)",
+            "getUserInterestRate(address)",
+            "transfer(address,uint256)",
+            "transferFrom(address,address,uint256)",
+            "burn(address,uint256)"
+          ],
+          "is_impacted_by_functions": [
+            "setInterestRate(uint256)"
+          ],
+          "constants_discovered": [
+            {
+              "value": {
+                "value": "MINT_AND_BURN_ROLE",
+                "type": "string"
+              }
+            },
+            {
+              "value": {
+                "value": "b't)U[\\x03\\xaa\\\\\\xf0\\x8c\\xc5\\xfc\\x08\\x90\\xc9}\\xb2\\x95\\xc9\\xce\\xc5\\xe6\\xbb\\x15D\\xbc\\xd7\\xfd\\x140\\xda\\xe3\\xe2'",
+                "type": "bytes32"
+              }
+            }
+          ],
+          "binary_constants": {}
+        }
+      },
+      {
+        "name": "burn(address,uint256)",
+        "visibility": "external",
+        "is_state_changing_entry_point": true,
+        "modifiers": [
+          "onlyRole"
+        ],
+        "storage_reads": [
+          "MINT_AND_BURN_ROLE"
+        ],
+        "storage_writes": [],
+        "internal_calls": [
+          "INTERNAL_CALL, ERC20._burn(address,uint256)(_from,_amount)",
+          "INTERNAL_CALL, RebaseToken._mintAccruedInterest(address)(_from)",
+          "MODIFIER_CALL, AccessControl.onlyRole(bytes32)(MINT_AND_BURN_ROLE)"
+        ],
+        "external_calls": [],
+        "cyclomatic_complexity": 1,
+        "require_printer_data": [],
+        "msg_sender_auth_checks": [],
+        "vars_and_auth_matrix": {
+          "state_variables_written": [
+            "_balances",
+            "_totalSupply",
+            "s_userLastUpdatedTimestamp"
+          ],
+          "has_auth_guards": false
+        },
+        "echidna_fuzzing_vectors": {
+          "impacts_functions": [],
+          "is_impacted_by_functions": [],
+          "constants_discovered": [],
+          "binary_constants": {}
+        }
+      },
+      {
+        "name": "_mintAccruedInterest(address)",
+        "visibility": "internal",
+        "is_state_changing_entry_point": false,
+        "modifiers": [],
+        "storage_reads": [
+          "block.timestamp"
+        ],
+        "storage_writes": [
+          "s_userLastUpdatedTimestamp"
+        ],
+        "internal_calls": [
+          "INTERNAL_CALL, ERC20._mint(address,uint256)(_user,balanceIncrease)",
+          "TMP_227(uint256) = INTERNAL_CALL, ERC20.balanceOf(address)(_user)",
+          "TMP_228(uint256) = INTERNAL_CALL, RebaseToken.balanceOf(address)(_user)"
+        ],
+        "external_calls": [],
+        "cyclomatic_complexity": 1,
+        "require_printer_data": [],
+        "msg_sender_auth_checks": [],
+        "vars_and_auth_matrix": {
+          "state_variables_written": [
+            "_balances",
+            "_totalSupply",
+            "s_userLastUpdatedTimestamp"
+          ],
+          "has_auth_guards": false
+        },
+        "echidna_fuzzing_vectors": {
+          "impacts_functions": [
+            "balanceOf(address)",
+            "transfer(address,uint256)",
+            "transferFrom(address,address,uint256)",
+            "burn(address,uint256)",
+            "mint(address,uint256)"
+          ],
+          "is_impacted_by_functions": [],
+          "constants_discovered": [],
+          "binary_constants": {}
+        }
+      },
+      {
+        "name": "balanceOf(address)",
+        "visibility": "public",
+        "is_state_changing_entry_point": false,
+        "modifiers": [],
+        "storage_reads": [
+          "PRECISION_FACTOR"
+        ],
+        "storage_writes": [],
+        "internal_calls": [
+          "TMP_231(uint256) = INTERNAL_CALL, ERC20.balanceOf(address)(_user)",
+          "TMP_232(uint256) = INTERNAL_CALL, RebaseToken._calculateUserAccumulatedInterestSinceLastUpdate(address)(_user)"
+        ],
+        "external_calls": [],
+        "cyclomatic_complexity": 1,
+        "require_printer_data": [],
+        "msg_sender_auth_checks": [],
+        "vars_and_auth_matrix": {
+          "state_variables_written": [],
+          "has_auth_guards": false
+        },
+        "echidna_fuzzing_vectors": {
+          "impacts_functions": [],
+          "is_impacted_by_functions": [],
+          "constants_discovered": [],
+          "binary_constants": {}
+        }
+      },
+      {
+        "name": "transfer(address,uint256)",
+        "visibility": "public",
+        "is_state_changing_entry_point": false,
+        "modifiers": [],
+        "storage_reads": [
+          "msg.sender",
+          "s_userInterestRate"
+        ],
+        "storage_writes": [
+          "s_userInterestRate"
+        ],
+        "internal_calls": [
+          "INTERNAL_CALL, RebaseToken._mintAccruedInterest(address)(_recipient)",
+          "INTERNAL_CALL, RebaseToken._mintAccruedInterest(address)(msg.sender)",
+          "TMP_240(uint256) = INTERNAL_CALL, RebaseToken.balanceOf(address)(msg.sender)",
+          "TMP_241(uint256) = INTERNAL_CALL, RebaseToken.balanceOf(address)(_recipient)",
+          "TMP_243(bool) = INTERNAL_CALL, ERC20.transfer(address,uint256)(_recipient,_amount)"
+        ],
+        "external_calls": [],
+        "cyclomatic_complexity": 3,
+        "require_printer_data": [],
+        "msg_sender_auth_checks": [],
+        "vars_and_auth_matrix": {
+          "state_variables_written": [
+            "_balances",
+            "_totalSupply"
+          ],
+          "has_auth_guards": false
+        },
+        "echidna_fuzzing_vectors": {
+          "impacts_functions": [
+            "balanceOf(address)",
+            "getUserInterestRate(address)",
+            "transferFrom(address,address,uint256)",
+            "burn(address,uint256)",
+            "mint(address,uint256)"
+          ],
+          "is_impacted_by_functions": [
+            "transferFrom(address,address,uint256)",
+            "mint(address,uint256)"
+          ],
+          "constants_discovered": [],
+          "binary_constants": {}
+        }
+      },
+      {
+        "name": "transferFrom(address,address,uint256)",
+        "visibility": "public",
+        "is_state_changing_entry_point": false,
+        "modifiers": [],
+        "storage_reads": [
+          "s_userInterestRate"
+        ],
+        "storage_writes": [
+          "s_userInterestRate"
+        ],
+        "internal_calls": [
+          "INTERNAL_CALL, RebaseToken._mintAccruedInterest(address)(_recipient)",
+          "INTERNAL_CALL, RebaseToken._mintAccruedInterest(address)(_sender)",
+          "TMP_249(uint256) = INTERNAL_CALL, RebaseToken.balanceOf(address)(_sender)",
+          "TMP_250(uint256) = INTERNAL_CALL, RebaseToken.balanceOf(address)(_recipient)",
+          "TMP_252(bool) = INTERNAL_CALL, ERC20.transferFrom(address,address,uint256)(_sender,_recipient,_amount)"
+        ],
+        "external_calls": [],
+        "cyclomatic_complexity": 3,
+        "require_printer_data": [],
+        "msg_sender_auth_checks": [],
+        "vars_and_auth_matrix": {
+          "state_variables_written": [
+            "_allowances",
+            "_balances",
+            "_totalSupply"
+          ],
+          "has_auth_guards": false
+        },
+        "echidna_fuzzing_vectors": {
+          "impacts_functions": [
+            "balanceOf(address)",
+            "getUserInterestRate(address)",
+            "transfer(address,uint256)",
+            "burn(address,uint256)",
+            "mint(address,uint256)"
+          ],
+          "is_impacted_by_functions": [
+            "transfer(address,uint256)",
+            "mint(address,uint256)"
+          ],
+          "constants_discovered": [],
+          "binary_constants": {}
+        }
+      },
+      {
+        "name": "_calculateUserAccumulatedInterestSinceLastUpdate(address)",
+        "visibility": "internal",
+        "is_state_changing_entry_point": false,
+        "modifiers": [],
+        "storage_reads": [
+          "PRECISION_FACTOR",
+          "block.timestamp",
+          "s_userInterestRate",
+          "s_userLastUpdatedTimestamp"
+        ],
+        "storage_writes": [],
+        "internal_calls": [],
+        "external_calls": [],
+        "cyclomatic_complexity": 1,
+        "require_printer_data": [],
+        "msg_sender_auth_checks": [],
+        "vars_and_auth_matrix": {
+          "state_variables_written": [],
+          "has_auth_guards": false
+        },
+        "echidna_fuzzing_vectors": {
+          "impacts_functions": [],
+          "is_impacted_by_functions": [
+            "burn(address,uint256)",
+            "transfer(address,uint256)",
+            "transferFrom(address,address,uint256)",
+            "mint(address,uint256)"
+          ],
+          "constants_discovered": [
+            {
+              "value": {
+                "value": "1000000000000000000",
+                "type": "uint256"
+              }
+            }
+          ],
+          "binary_constants": {}
+        }
+      },
+      {
+        "name": "getInterestRate()",
+        "visibility": "external",
+        "is_state_changing_entry_point": false,
+        "modifiers": [],
+        "storage_reads": [
+          "s_interestRate"
+        ],
+        "storage_writes": [],
+        "internal_calls": [],
+        "external_calls": [],
+        "cyclomatic_complexity": 1,
+        "require_printer_data": [],
+        "msg_sender_auth_checks": [],
+        "vars_and_auth_matrix": {
+          "state_variables_written": [],
+          "has_auth_guards": false
+        },
+        "echidna_fuzzing_vectors": {
+          "impacts_functions": [],
+          "is_impacted_by_functions": [
+            "setInterestRate(uint256)"
+          ],
+          "constants_discovered": [
+            {
+              "value": {
+                "value": "100000000",
+                "type": "uint256"
+              }
+            },
+            {
+              "value": {
+                "value": "1000000000000000000",
+                "type": "uint256"
+              }
+            },
+            {
+              "value": {
+                "value": "5",
+                "type": "uint256"
+              }
+            },
+            {
+              "value": {
+                "value": "5000000000000000000",
+                "type": "uint256"
+              }
+            },
+            {
+              "value": {
+                "value": "50000000000",
+                "type": "uint256"
+              }
+            }
+          ],
+          "binary_constants": {
+            "BinaryType.MULTIPLICATION": [
+              {
+                "value": {
+                  "value": "5",
+                  "type": "uint256"
+                }
+              }
+            ],
+            "BinaryType.DIVISION": [
+              {
+                "value": {
+                  "value": "100000000",
+                  "type": "uint256"
+                }
+              }
+            ]
+          }
+        }
+      },
+      {
+        "name": "getUserInterestRate(address)",
+        "visibility": "external",
+        "is_state_changing_entry_point": false,
+        "modifiers": [],
+        "storage_reads": [
+          "s_userInterestRate"
+        ],
+        "storage_writes": [],
+        "internal_calls": [],
+        "external_calls": [],
+        "cyclomatic_complexity": 1,
+        "require_printer_data": [],
+        "msg_sender_auth_checks": [],
+        "vars_and_auth_matrix": {
+          "state_variables_written": [],
+          "has_auth_guards": false
+        },
+        "echidna_fuzzing_vectors": {
+          "impacts_functions": [],
+          "is_impacted_by_functions": [
+            "transfer(address,uint256)",
+            "transferFrom(address,address,uint256)",
+            "mint(address,uint256)"
+          ],
+          "constants_discovered": [],
+          "binary_constants": {}
+        }
+      },
+      {
+        "name": "slitherConstructorVariables()",
+        "visibility": "internal",
+        "is_state_changing_entry_point": false,
+        "modifiers": [],
+        "storage_reads": [
+          "PRECISION_FACTOR"
+        ],
+        "storage_writes": [
+          "s_interestRate"
+        ],
+        "internal_calls": [],
+        "external_calls": [],
+        "cyclomatic_complexity": 1,
+        "require_printer_data": [],
+        "msg_sender_auth_checks": [],
+        "vars_and_auth_matrix": {
+          "state_variables_written": [
+            "s_interestRate"
+          ],
+          "has_auth_guards": false
+        },
+        "echidna_fuzzing_vectors": {
+          "impacts_functions": [
+            "getInterestRate()",
+            "mint(address,uint256)",
+            "setInterestRate(uint256)"
+          ],
+          "is_impacted_by_functions": [],
+          "constants_discovered": [
+            {
+              "value": {
+                "value": "100000000",
+                "type": "uint256"
+              }
+            },
+            {
+              "value": {
+                "value": "1000000000000000000",
+                "type": "uint256"
+              }
+            },
+            {
+              "value": {
+                "value": "5",
+                "type": "uint256"
+              }
+            },
+            {
+              "value": {
+                "value": "5000000000000000000",
+                "type": "uint256"
+              }
+            },
+            {
+              "value": {
+                "value": "50000000000",
+                "type": "uint256"
+              }
+            }
+          ],
+          "binary_constants": {
+            "BinaryType.DIVISION": [
+              {
+                "value": {
+                  "value": "100000000",
+                  "type": "uint256"
+                }
+              }
+            ],
+            "BinaryType.MULTIPLICATION": [
+              {
+                "value": {
+                  "value": "5",
+                  "type": "uint256"
+                }
+              }
+            ]
+          }
+        }
+      },
+      {
+        "name": "slitherConstructorConstantVariables()",
+        "visibility": "internal",
+        "is_state_changing_entry_point": false,
+        "modifiers": [],
+        "storage_reads": [],
+        "storage_writes": [
+          "DEFAULT_ADMIN_ROLE",
+          "MINT_AND_BURN_ROLE",
+          "PRECISION_FACTOR"
+        ],
+        "internal_calls": [
+          "TMP_258(bytes32) = SOLIDITY_CALL keccak256(bytes)(MINT_AND_BURN_ROLE)"
+        ],
+        "external_calls": [],
+        "cyclomatic_complexity": 1,
+        "require_printer_data": [],
+        "msg_sender_auth_checks": [],
+        "vars_and_auth_matrix": {
+          "state_variables_written": [
+            "DEFAULT_ADMIN_ROLE",
+            "MINT_AND_BURN_ROLE",
+            "PRECISION_FACTOR"
+          ],
+          "has_auth_guards": false
+        },
+        "echidna_fuzzing_vectors": {
+          "impacts_functions": [
+            "balanceOf(address)",
+            "grantMintAndBurnRole(address)",
+            "transfer(address,uint256)",
+            "transferFrom(address,address,uint256)",
+            "burn(address,uint256)",
+            "mint(address,uint256)"
+          ],
+          "is_impacted_by_functions": [],
+          "constants_discovered": [
+            {
+              "value": {
+                "value": "MINT_AND_BURN_ROLE",
+                "type": "string"
+              }
+            },
+            {
+              "value": {
+                "value": "1000000000000000000",
+                "type": "uint256"
+              }
+            },
+            {
+              "value": {
+                "value": "0",
+                "type": "uint256"
+              }
+            }
+          ],
+          "binary_constants": {}
+        }
+      }
+    ]
+  },
+  "Vault": {
+    "contract_name": "Vault",
+    "inheritance_chain": [],
+    "contract_variables_raw": [
+      "i_rebaseToken"
+    ],
+    "storage_slot_layout": [],
+    "functions": [
+      {
+        "name": "constructor(IRebaseToken)",
+        "visibility": "public",
+        "is_state_changing_entry_point": false,
+        "modifiers": [],
+        "storage_reads": [],
+        "storage_writes": [
+          "i_rebaseToken"
+        ],
+        "internal_calls": [],
+        "external_calls": [],
+        "cyclomatic_complexity": 1,
+        "require_printer_data": [],
+        "msg_sender_auth_checks": [],
+        "vars_and_auth_matrix": {
+          "state_variables_written": [
+            "i_rebaseToken"
+          ],
+          "has_auth_guards": false
+        },
+        "echidna_fuzzing_vectors": {
+          "impacts_functions": [
+            "redeem(uint256)",
+            "deposit()",
+            "getRebaseTokenAddress()"
+          ],
+          "is_impacted_by_functions": [],
+          "constants_discovered": [],
+          "binary_constants": {}
+        }
+      },
+      {
+        "name": "receive()",
+        "visibility": "external",
+        "is_state_changing_entry_point": true,
+        "modifiers": [],
+        "storage_reads": [],
+        "storage_writes": [],
+        "internal_calls": [],
+        "external_calls": [],
+        "cyclomatic_complexity": 1,
+        "require_printer_data": [],
+        "msg_sender_auth_checks": [],
+        "vars_and_auth_matrix": {
+          "state_variables_written": [],
+          "has_auth_guards": false
+        },
+        "echidna_fuzzing_vectors": {
+          "impacts_functions": [],
+          "is_impacted_by_functions": [],
+          "constants_discovered": [],
+          "binary_constants": {}
+        }
+      },
+      {
+        "name": "fallback()",
+        "visibility": "external",
+        "is_state_changing_entry_point": true,
+        "modifiers": [],
+        "storage_reads": [],
+        "storage_writes": [],
+        "internal_calls": [],
+        "external_calls": [],
+        "cyclomatic_complexity": 1,
+        "require_printer_data": [],
+        "msg_sender_auth_checks": [],
+        "vars_and_auth_matrix": {
+          "state_variables_written": [],
+          "has_auth_guards": false
+        },
+        "echidna_fuzzing_vectors": {
+          "impacts_functions": [],
+          "is_impacted_by_functions": [],
+          "constants_discovered": [],
+          "binary_constants": {}
+        }
+      },
+      {
+        "name": "deposit()",
+        "visibility": "external",
+        "is_state_changing_entry_point": true,
+        "modifiers": [],
+        "storage_reads": [
+          "i_rebaseToken",
+          "msg.sender",
+          "msg.value"
+        ],
+        "storage_writes": [],
+        "internal_calls": [],
+        "external_calls": [
+          "i_rebaseToken.mint(msg.sender,msg.value)"
+        ],
+        "cyclomatic_complexity": 1,
+        "require_printer_data": [],
+        "msg_sender_auth_checks": [],
+        "vars_and_auth_matrix": {
+          "state_variables_written": [],
+          "has_auth_guards": false
+        },
+        "echidna_fuzzing_vectors": {
+          "impacts_functions": [],
+          "is_impacted_by_functions": [
+            "constructor(address)"
+          ],
+          "constants_discovered": [],
+          "binary_constants": {}
+        }
+      },
+      {
+        "name": "redeem(uint256)",
+        "visibility": "external",
+        "is_state_changing_entry_point": true,
+        "modifiers": [],
+        "storage_reads": [
+          "i_rebaseToken",
+          "msg.sender"
+        ],
+        "storage_writes": [],
+        "internal_calls": [
+          "TMP_285(None) = SOLIDITY_CALL revert Vault__RedeemFailed()()"
+        ],
+        "external_calls": [
+          "address(msg.sender).call{value: _amount}()",
+          "i_rebaseToken.balanceOf(msg.sender)",
+          "i_rebaseToken.burn(msg.sender,_amount)"
+        ],
+        "cyclomatic_complexity": 3,
+        "require_printer_data": [],
+        "msg_sender_auth_checks": [],
+        "vars_and_auth_matrix": {
+          "state_variables_written": [],
+          "has_auth_guards": false
+        },
+        "echidna_fuzzing_vectors": {
+          "impacts_functions": [],
+          "is_impacted_by_functions": [
+            "constructor(address)"
+          ],
+          "constants_discovered": [
+            {
+              "value": {
+                "value": "",
+                "type": "string"
+              }
+            },
+            {
+              "value": {
+                "value": "115792089237316195423570985008687907853269984665640564039457584007913129639935",
+                "type": "uint256"
+              }
+            }
+          ],
+          "binary_constants": {}
+        }
+      },
+      {
+        "name": "getRebaseTokenAddress()",
+        "visibility": "external",
+        "is_state_changing_entry_point": false,
+        "modifiers": [],
+        "storage_reads": [
+          "i_rebaseToken"
+        ],
+        "storage_writes": [],
+        "internal_calls": [],
+        "external_calls": [],
+        "cyclomatic_complexity": 1,
+        "require_printer_data": [],
+        "msg_sender_auth_checks": [],
+        "vars_and_auth_matrix": {
+          "state_variables_written": [],
+          "has_auth_guards": false
+        },
+        "echidna_fuzzing_vectors": {
+          "impacts_functions": [],
+          "is_impacted_by_functions": [
+            "constructor(address)"
+          ],
+          "constants_discovered": [],
+          "binary_constants": {}
+        }
+      }
+    ]
+  }
+}
