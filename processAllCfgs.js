@@ -281,9 +281,6 @@ function processHolisticSchema(rootDir) {
         }
     });
 
-
-
-
     return SENTINODE_MAP;
 }
 
@@ -295,6 +292,7 @@ console.log(`Total Holistic Object Keys: ${Object.keys(SENTINODE_MAP).length}`);
 
 
 const targetFile = '.-RebaseToken-mint(address,uint256).dot';
+// const targetFile = '.-RebaseToken-slitherConstructorVariables().dot';
 // To print a specific file's full logic data:
 console.log(`--- DEEP TRACE FOR: ${targetFile} ---`);
 console.log(JSON.stringify(SENTINODE_MAP[targetFile], null, 2));
@@ -303,3 +301,5 @@ console.log(JSON.stringify(SENTINODE_MAP[targetFile], null, 2));
 
 
 
+
+fs.writeFileSync('./generated_cfgs/raw_trace_map.json', JSON.stringify(SENTINODE_MAP, null, 2));
