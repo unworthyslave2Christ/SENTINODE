@@ -1,6 +1,7 @@
 #BY GOD'S GRACE ALONE
 import json
 import sys
+import re
 import subprocess
 from pathlib import Path
 from collections import defaultdict
@@ -118,7 +119,6 @@ def _extract_constants_from_irs(irs: list, all_cst_used: list, all_cst_used_in_b
             _extract_constant_from_read(ir, r, all_cst_used, all_cst_used_in_binary, context_explored)
 
 # [CONTINUED IN PART 2]
-
 #BY GOD'S GRACE ALONE
 # Continuation of sentinode_complete_core.py
 
@@ -139,7 +139,6 @@ def get_msg_sender_checks(function: Function) -> list[str]:
 # --- 1. DYNAMIC JAVASCRIPT PRE-PROCESSOR ORCHESTRATION ---
 print("--- RUNNING NODE.JS PROJECT TRACE ENGINE MATRIX ---")
 try:
-    # Ensure processAllCfgs.js dumps its master in-memory SENTINODE_MAP directly to disk on completion
     with open("processAllCfgs.js", "r", encoding="utf-8") as js_file:
         js_code = js_file.read()
     
@@ -164,14 +163,11 @@ if raw_trace_file.exists():
         print(f"Loaded {len(raw_cache_data)} raw files from processAllCfgs. Ingesting un-blanked properties...")
         
         for file_key, raw_payload in raw_cache_data.items():
-            # Build clean data container omitting targeted overlapping properties natively
             pruned_payload = {}
             for field_key, field_value in raw_payload.items():
                 if field_key not in ["storage_reads", "storage_writes", "conditions_of_msg_sender", "functions_impacted"]:
                     pruned_payload[field_key] = field_value
-            
             js_cfg_lookup_cache[file_key] = pruned_payload
-            
     except Exception as err:
         print(f"Error executing trace processing optimization bounds: {str(err)}")
 else:
@@ -185,8 +181,11 @@ except Exception as e:
 
 # Ensure output workspace folder structure is generated cleanly
 Path("./generated_cfgs").mkdir(exist_ok=True)
-
 sentinode_holistic_map = {}
+
+# [CONTINUED IN PART 3]
+#BY GOD'S GRACE ALONE
+# Continuation of sentinode_complete_core.py
 
 # Primary loop running over all contracts tracked by the compilation unit environment
 for contract in slither.contracts:
@@ -196,8 +195,22 @@ for contract in slither.contracts:
     is_interface = contract.contract_kind == "interface"
     is_library = contract.contract_kind == "library"
     
-    # Exclude openzeppelin standard helper and forge unit test files to ensure lightweight canvas maps
-    if contract.is_from_dependency() or contract.is_test:
+    # --- CRITICAL FIX: LINEAGE ENFORCEMENT BOUNDARY CHECK ---
+    # We inspect parent contract inheritance names to isolate forge-std framework modules.
+    # This completely eliminates blunt string matching so that protocol contracts 
+    # like 'SlitherTest' and 'SlitherRequireContract' are preserved natively.
+    is_forge_framework_module = False
+    if hasattr(contract, 'inheritance') and contract.inheritance:
+        for parent_class in contract.inheritance:
+            if parent_class.name in ["Test", "Script", "StdCheats", "CommonBase", "ScriptBase"]:
+                is_forge_framework_module = True
+                break
+                
+    file_path_abs = contract.source_mapping.filename.absolute if contract.source_mapping and contract.source_mapping.filename else ""
+    is_forge_std_lib = "lib/forge-std/" in file_path_abs or "lib/ds-test/" in file_path_abs
+    
+    # Safely skip only true testing boilerplate systems while retaining real user target contracts
+    if is_forge_framework_module or is_forge_std_lib or contract.is_test:
         continue
 
     # Determine explicit operational role tags for client workspace router selection phases
@@ -208,6 +221,7 @@ for contract in slither.contracts:
     elif is_abstract:
         ui_classification = "ABSTRACT_BASE_TEMPLATE"
     else:
+        # Every inherited background OpenZeppelin base contract falls here cleanly instead of being dropped
         ui_classification = "INHERITED_LOGIC_LAYER"
 
     contract_name = contract.name
@@ -217,6 +231,8 @@ for contract in slither.contracts:
     # -------------------------------------------------------------------------
     variable_order_layout = []
     slot_index = 0
+    
+    # Access state_variables_ordered to capture elements across parent inheritance fields
     for var in contract.state_variables_ordered:
         if not (var.is_constant or var.is_immutable):
             try:
@@ -238,9 +254,12 @@ for contract in slither.contracts:
     # 2. INTEGRATED EXTRACTION: function-summary Core Matrix
     # -------------------------------------------------------------------------
     (name, inheritance, var_summary, func_summaries, modif_summaries) = contract.get_summary()
+    
     functions_manifest = []
 
-# [CONTINUED IN PART 3]
+# [CONTINUED IN PART 4 FOR FUNCTION SPLICING AND GRAPH CACHE MERGING]
+
+
 #BY GOD'S GRACE ALONE
 # Continuation of sentinode_complete_core.py
 
@@ -251,7 +270,7 @@ for contract in slither.contracts:
         # Locate exact native Function object to bridge advanced structural attributes
         func_obj = next((f for f in contract.functions if f.full_name == f_name or f.name == f_name), None)
         
-        # --- 4. STEP 4: ENHANCED STORAGE READS & WRITES METRIC GENERATION ---
+        # --- STEP 4: ENHANCED STORAGE READS & WRITES METRIC GENERATION ---
         storage_reads_enhanced = []
         storage_writes_enhanced = []
         
@@ -272,7 +291,7 @@ for contract in slither.contracts:
         storage_reads_enhanced = sorted(list(set(storage_reads_enhanced)))
         storage_writes_enhanced = sorted(list(set(storage_writes_enhanced)))
 
-        # 3. INTEGRATED EXTRACTION: entry-points Mapping Rules
+        # INTEGRATED EXTRACTION: entry-points Mapping Rules
         is_entry_point = False
         if func_obj:
             is_entry_point = (
@@ -283,7 +302,7 @@ for contract in slither.contracts:
                 not func_obj.is_constructor
             )
 
-        # 4. INTEGRATED EXTRACTION: require Printer via SlithIR Operations
+        # INTEGRATED EXTRACTION: require Printer via SlithIR Operations
         slithir_requires = []
         if func_obj:
             try:
@@ -296,7 +315,7 @@ for contract in slither.contracts:
             except Exception:
                 pass
 
-        # 5. INTEGRATED EXTRACTION: vars-and-auth (msg.sender checks & parent variable isolation)
+        # INTEGRATED EXTRACTION: vars-and-auth (msg.sender checks & parent variable isolation)
         msg_sender_conditions = []
         state_variables_written_auth = []
         state_variables_written_auth_enhanced = []
@@ -315,7 +334,7 @@ for contract in slither.contracts:
         state_variables_written_auth = sorted(list(set(state_variables_written_auth)))
         state_variables_written_auth_enhanced = sorted(list(set(state_variables_written_auth_enhanced)))
 
-        # 6. INTEGRATED EXTRACTION: echidna Data Dependency / Invariant Fuzzing Relations
+        # INTEGRATED EXTRACTION: echidna Data Dependency / Invariant Fuzzing Relations
         impacts = []
         is_impacted_by = []
         impacts_enhanced = []
@@ -358,17 +377,17 @@ for contract in slither.contracts:
         impacts_enhanced = sorted(list(set(impacts_enhanced)))
         is_impacted_by_enhanced = sorted(list(set(is_impacted_by_enhanced)))
 
-        # --- 7. CRITICAL O(1) CONSTANT TIME PRE-PRUNED CFG DEEP SPLICING ENGINE ---
+        # --- CRITICAL O(1) CONSTANT TIME PRE-PRUNED CFG DEEP SPLICING ENGINE ---
         matched_cfg_deep_trace = None
         if func_obj:
-            # Reconstruct exact filename parameters matching the signature key fingerprint layout
+            # Construct signature variables by re-extracting clean argument types
             sig_raw = func_obj.signature_str if hasattr(func_obj, 'signature_str') else ""
             param_types_str = sig_raw.split('(')[1].replace(')', '') if '(' in sig_raw else ""
             
             # Formulate the deterministic key fingerprint string handle
             target_cfg_filename = f".-{contract.name}-{func_obj.name}({param_types_str}).dot"
             
-            # Direct O(1) matching injection block loop lookup from cache database variables
+            # Query the pre-populated pruned lookup cache for an exact match.
             if target_cfg_filename in js_cfg_lookup_cache:
                 matched_cfg_deep_trace = js_cfg_lookup_cache[target_cfg_filename]
             else:
@@ -376,7 +395,7 @@ for contract in slither.contracts:
                 if fallback_key in js_cfg_lookup_cache:
                     matched_cfg_deep_trace = js_cfg_lookup_cache[fallback_key]
                 else:
-                    # Comprehensive regex-based mapping scan to guarantee mapping alignment loops
+                    # Comprehensive scanning fallback routine to preserve mapping robustness
                     for available_key in js_cfg_lookup_cache.keys():
                         if available_key.startswith(f".-{contract.name}-{func_obj.name}("):
                             matched_cfg_deep_trace = js_cfg_lookup_cache[available_key]
@@ -424,11 +443,80 @@ for contract in slither.contracts:
         "functions": functions_manifest
     }
 
-# Write complete unified high-precision manifest file straight to project file output destination path
+# [CONTINUED IN PART 5]
+# BY GOD'S GRACE ALONE
+# Continuation of sentinode_complete_core.py
+
+# --- 8. STEP 8: LINEAGE-AWARE RUNTIME METRIC SYNCHRONIZATION ---
+unique_source_files = set()
+total_contracts_parsed = 0
+classification_breakdown = defaultdict(int)
+
+# Ingest baseline source records directly from the analyzer runtime engine context
+if hasattr(slither, 'source_files'):
+    for sf in slither.source_files:
+        unique_source_files.add(str(sf))
+
+# Process every active contract using structural lineage filtering to guarantee metric accuracy
+for c in slither.contracts:
+    # Match framework lineage conditions to filter out forge-std boilerplate safely
+    is_forge_h = False
+    if hasattr(c, 'inheritance') and c.inheritance:
+        for p in c.inheritance:
+            if p.name in ["Test", "Script", "StdCheats", "CommonBase", "ScriptBase"]:
+                is_forge_h = True
+                break
+                
+    f_path = c.source_mapping.filename.absolute if c.source_mapping and c.source_mapping.filename else ""
+    is_forge_std_lib = "lib/forge-std/" in f_path or "lib/ds-test/" in f_path
+    
+    # Trigger drop rules exclusively on non-protocol framework artifacts using the fixed variable
+    if is_forge_h or is_forge_std_lib or c.is_test:
+        continue
+        
+    total_contracts_parsed += 1
+    
+    # Read the pre-mapped structural status configurations from Part 3
+    is_leaf = c in slither.contracts_derived
+    is_abs = getattr(c, 'is_abstract', False)
+    is_inf = c.contract_kind == "interface"
+    is_lib = c.contract_kind == "library"
+    
+    if is_leaf and not is_abs and not is_inf and not is_lib:
+        final_ui_type = "DEPLOYABLE_TARGET"
+    elif is_inf or is_lib:
+        final_ui_type = "INTERFACE_LIBRARY_STUB"
+    elif is_abs:
+        final_ui_type = "ABSTRACT_BASE_TEMPLATE"
+    else:
+        final_ui_type = "INHERITED_LOGIC_LAYER"
+        
+    classification_breakdown[final_ui_type] += 1
+    
+    # Append the absolute production source file location map
+    if c.source_mapping and c.source_mapping.filename:
+        unique_source_files.add(c.source_mapping.filename.absolute)
+
+# Synthesize the finalized interactive IDE package master manifest payload structure
+final_ide_package_manifest = {
+    "SENTINODE_RUN_METRICS": {
+        "total_unique_source_files_compiled": len(unique_source_files),
+        "total_contracts_discovered": total_contracts_parsed,
+        "deployable_target_leafs": classification_breakdown["DEPLOYABLE_TARGET"],
+        "abstract_base_templates": classification_breakdown["ABSTRACT_BASE_TEMPLATE"],
+        "inherited_logic_layers": classification_breakdown["INHERITED_LOGIC_LAYER"],
+        "interface_library_stubs": classification_breakdown["INTERFACE_LIBRARY_STUB"]
+    },
+    "CONTRACTS_BLUEPRINT_MAP": sentinode_holistic_map
+}
+
+# Write complete unfragmented bundle directly to the final JSON destination path
 output_file_path = "./sentinode_master_manifest.json"
 with open(output_file_path, "w") as f:
-    json.dump(sentinode_holistic_map, f, indent=2)
+    json.dump(final_ide_package_manifest, f, indent=2)
 
-print(json.dumps({"success": True, "output_manifest": output_file_path}))
-
-
+print(json.dumps({
+    "success": True, 
+    "output_manifest": output_file_path,
+    "metrics_synchronized": final_ide_package_manifest["SENTINODE_RUN_METRICS"]
+}, indent=2))
