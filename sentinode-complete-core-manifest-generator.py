@@ -497,6 +497,56 @@ for c in slither.contracts:
     if c.source_mapping and c.source_mapping.filename:
         unique_source_files.add(c.source_mapping.filename.absolute)
 
+# =========================================================================
+# ─── NATIVE SLITHER-ONLY ABI EXTRACTION (CORRECTED ATTRIBUTE PATHS) ──────
+# =========================================================================
+extracted_contract_abis = {}
+
+for unit in slither.compilation_units:
+    # Use the unified CryticCompile instance for the compilation unit
+    crytic_compile_obj = unit.crytic_compile
+    
+    for contract in unit.contracts:
+        c_name = contract.name
+        
+        # 1. Framework & Payload Filtering: Skips non-critical libraries early
+        if "forge-std" in c_name or "Test" in c_name or "Script" in c_name:
+            continue
+            
+        abi_data = None
+        
+        # 2. Main Extraction Loop: Traverse nested compilation units down to individual source files
+        if hasattr(crytic_compile_obj, "compilation_units"):
+            for cu_id, comp_unit in crytic_compile_obj.compilation_units.items():
+                for su_id, source_unit in comp_unit.source_units.items():
+                    # Safely fetch ABI if the contract exists inside this source file artifact
+                    if c_name in source_unit.abis:
+                        abi_data = source_unit.abis[c_name]
+                        break
+                if abi_data:
+                    break
+        
+        # 3. Fallback Method A: Use the direct class look-up method from CryticCompile if available
+        if not abi_data and hasattr(crytic_compile_obj, "abi"):
+            try:
+                abi_data = crytic_compile_obj.abi(c_name)
+            except Exception:
+                pass
+
+        # 4. Fallback Method B: Direct top-level mapping dictionary lookup
+        if not abi_data and hasattr(crytic_compile_obj, "abis"):
+            try:
+                abi_data = crytic_compile_obj.abis.get(c_name)
+            except Exception:
+                pass
+                
+        # 5. Commit found valid schema to your tracing matrix payload
+        if abi_data:
+            extracted_contract_abis[c_name] = abi_data
+
+
+
+
 # Synthesize the finalized interactive IDE package master manifest payload structure
 final_ide_package_manifest = {
     "SENTINODE_RUN_METRICS": {
@@ -507,8 +557,11 @@ final_ide_package_manifest = {
         "inherited_logic_layers": classification_breakdown["INHERITED_LOGIC_LAYER"],
         "interface_library_stubs": classification_breakdown["INTERFACE_LIBRARY_STUB"]
     },
+    "CONTRACT_ABIS": extracted_contract_abis,  # <--- Injected Native Slither ABI Registry
     "CONTRACTS_BLUEPRINT_MAP": sentinode_holistic_map
 }
+
+
 
 # Write complete unfragmented bundle directly to the final JSON destination path
 output_file_path = "./sentinode_master_manifest.json"
