@@ -24,16 +24,28 @@ fi
 
 echo "=== STEP 2 & 3: PYTHON VIRTUAL ENVIRONMENT ==="
 cd "$SCRIPTS_DIR"
-python3 -m venv env
+
+# Only create the virtual environment if the activation binary does not exist
+if [ ! -f "$SCRIPTS_DIR/env/bin/activate" ]; then
+    echo "Virtual environment not detected. Initializing env..."
+    python3 -m venv env
+else
+    echo "Existing virtual environment detected. Skipping initialization."
+fi
 
 # CRITICAL FIX: Explicitly source using absolute shell mapping path structures
 # This guarantees that the subshell environment path registers the venv
 source "$SCRIPTS_DIR/env/bin/activate"
 
 echo "=== STEP 4: ENFORCING SLITHER PROVISIONING INSIDE VENV ==="
-# Explicitly target the virtual environment's pip directly to guarantee isolation
-"$SCRIPTS_DIR/env/bin/pip" install --upgrade pip
-"$SCRIPTS_DIR/env/bin/pip" install slither-analyzer
+# FAST-PATH CHECK: Skip running pip network calls entirely if slither binary exists
+if [ -f "$SCRIPTS_DIR/env/bin/slither" ]; then
+    echo "✓ Slither binary already provisioned locally inside venv. Skipping redownload."
+else
+    echo "Slither binary missing from venv. Initializing dependency layer download..."
+    "$SCRIPTS_DIR/env/bin/pip" install --upgrade pip
+    "$SCRIPTS_DIR/env/bin/pip" install slither-analyzer
+fi
 
 echo "=== STEP 6: EXECUTING ANALYSIS & STATIC GENERATION ==="
 cd "$TARGET_DIR"
