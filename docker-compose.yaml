@@ -14,7 +14,7 @@ services:
       dockerfile: Dockerfile
     ports:
       - "8545:8545"
-    # Points to the absolute binary location mapped by the builder stage
+    # Points directly to the absolute system binary location mapped by Stage 2
     command: ["/root/.foundry/bin/anvil", "--host", "0.0.0.0"]
     volumes:
       - .:/app
