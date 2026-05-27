@@ -13,10 +13,11 @@ RUN curl -L https://foundry.paradigm.xyz | bash
 ENV PATH="/root/.foundry/bin:${PATH}"
 RUN foundryup
 
-# Pre-compile the venv into an isolated root directory (/opt/env)
-RUN python3 -m venv /opt/env && \
-    /opt/env/bin/pip install --upgrade pip && \
-    /opt/env/bin/pip install --no-cache-dir slither-analyzer
+# CRITICAL FIX: Changed target directory name to match orchestrator.sh exactly (/opt/sentinode_env)
+# Added --copies to force true binary compilation isolation across multi-stage images
+RUN python3 -m venv --copies /opt/sentinode_env && \
+    /opt/sentinode_env/bin/pip install --upgrade pip && \
+    /opt/sentinode_env/bin/pip install --no-cache-dir slither-analyzer
 
 # ==========================================
 # STAGE 2: THE SLIM PRODUCTION RUNTIME
@@ -32,15 +33,15 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 WORKDIR /app
 
-# Copy the lightweight binaries and pre-compiled venv from Stage 1
+# Copy the lightweight binaries and the correct robust venv from Stage 1
 COPY --from=builder /root/.foundry /root/.foundry
-COPY --from=builder /opt/env /opt/env
+COPY --from=builder /opt/sentinode_env /opt/sentinode_env
 
 # Map Foundry globally into the system PATH
 ENV PATH="/root/.foundry/bin:${PATH}"
 
 # Force the container system PATH to prioritize the isolated venv binaries
-ENV PATH="/opt/env/bin:${PATH}"
+ENV PATH="/opt/sentinode_env/bin:${PATH}"
 
 # Ingest workspace scripts
 COPY . .
