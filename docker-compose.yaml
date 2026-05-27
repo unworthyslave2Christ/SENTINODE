@@ -14,7 +14,7 @@ services:
       dockerfile: Dockerfile
     ports:
       - "8545:8545"
-    # Overrides default entrypoint script loop to host the long-running evm local node
+    # Points to the absolute binary location mapped by the builder stage
     command: ["/root/.foundry/bin/anvil", "--host", "0.0.0.0"]
     volumes:
       - .:/app
