@@ -1,0 +1,20 @@
+services:
+  # The isolated multi-language security runner
+  sentinode-engine:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - .:/app
+
+  # Persistent Simulation RPC Node (Prepped for Phase 3 Local Devnet Forks)
+  anvil-node:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8545:8545"
+    # Points directly to the absolute system binary location mapped by Stage 2
+    command: ["/root/.foundry/bin/anvil", "--host", "0.0.0.0"]
+    volumes:
+      - .:/app

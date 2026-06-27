@@ -58,6 +58,10 @@ contract RebaseToken is ERC20, Ownable, AccessControl {
 
     }
 
+    // function dummyPrivateFunction() private pure returns (uint256){
+    //     return 777;
+    // }
+
     function grantMintAndBurnRole(address _account) external onlyOwner {
         _grantRole(MINT_AND_BURN_ROLE, _account);
     }

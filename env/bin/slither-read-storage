@@ -1,0 +1,8 @@
+#!/home/unworthyslavetochrist/foundry-2026-forCHRISTALONE/sentinode_case_1/sentinode_case_1_1/env/bin/python3
+# -*- coding: utf-8 -*-
+import re
+import sys
+from slither.tools.read_storage.__main__ import main
+if __name__ == '__main__':
+    sys.argv[0] = re.sub(r'(-script\.pyw|\.exe)?$', '', sys.argv[0])
+    sys.exit(main())
